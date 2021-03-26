@@ -1,0 +1,12 @@
+{
+    "C_Cpp.intelliSenseEngine": "Tag Parser",
+    "idf.adapterTargetName": "esp32",
+    "idf.customExtraPaths": "d:\\Espressif\\.espressif\\tools\\xtensa-esp32-elf\\esp-2020r3-8.4.0\\xtensa-esp32-elf\\bin;d:\\Espressif\\.espressif\\tools\\xtensa-esp32s2-elf\\esp-2020r3-8.4.0\\xtensa-esp32s2-elf\\bin;d:\\Espressif\\.espressif\\tools\\esp32ulp-elf\\2.28.51-esp-20191205\\esp32ulp-elf-binutils\\bin;d:\\Espressif\\.espressif\\tools\\esp32s2ulp-elf\\2.28.51-esp-20191205\\esp32s2ulp-elf-binutils\\bin;d:\\Espressif\\.espressif\\tools\\cmake\\3.16.4\\bin;d:\\Espressif\\.espressif\\tools\\openocd-esp32\\v0.10.0-esp32-20200709\\openocd-esp32\\bin;d:\\Espressif\\.espressif\\tools\\ninja\\1.10.0;d:\\Espressif\\.espressif\\tools\\idf-exe\\1.0.1;d:\\Espressif\\.espressif\\tools\\ccache\\3.7;d:\\Espressif\\.espressif\\tools\\dfu-util\\0.9\\dfu-util-0.9-win64",
+    "idf.customExtraVars": "{\"OPENOCD_SCRIPTS\":\"d:\\\\Espressif\\\\.espressif\\\\tools\\\\openocd-esp32\\\\v0.10.0-esp32-20200709/openocd-esp32/share/openocd/scripts\",\"IDF_CCACHE_ENABLE\":\"1\"}",
+    "idf.espIdfPathWin": "f:\\ESPprjs\\esp-idf-v4.2",
+    "idf.espAdfPathWin": "",
+    "idf.espMdfPathWin": "",
+    "idf.portWin": "COM3",
+    "idf.pythonBinPathWin": "d:\\Espressif\\.espressif\\python_env\\idf4.2_py3.8_env\\Scripts\\python.exe",
+    "idf.toolsPathWin": ""
+}
