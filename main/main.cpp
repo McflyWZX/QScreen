@@ -1,7 +1,7 @@
 /*
  * @Author: Mcfly
  * @Date: 2021-03-26 19:11:07
- * @LastEditTime: 2021-03-27 00:26:07
+ * @LastEditTime: 2021-03-27 01:03:17
  * @LastEditors: Mcfly
  * @Description: 
  * @FilePath: \QScreen\main\main.cpp
@@ -63,15 +63,17 @@ void listSystemInfo(void)
 void screenUpdate(void *spiScreen)
 {
     SPI12864 *screen = (SPI12864*)spiScreen;
-    uint64_t i = 0;
+    uint64_t i = 0, ti;
     while(1)
     {
         std::stringstream ss;
-        ss << "      Meeting across mountains and seas.\n" << "times of running:\n" << i;
+        ti = i%100 / 10;
+        ss << "    Meeting across\n mountains and seas.\n\n" << "times of running:\n" << i++;
+        ss << "\n" << ti << ti << ti << ti << ti << ti << ti << ti << ti << ti << ti << ti << ti << ti << ti;
         screen->showString(0, 1, (uint8_t*)ss.str().c_str(), 6);
         TaskHandle_t handle = xTaskGetCurrentTaskHandle();
         printf("屏幕显示任务，运行在核心：%d 上。\n", xTaskGetAffinity(handle ));
-        vTaskDelay(10 / portTICK_PERIOD_MS);
+        //vTaskDelay(10 / portTICK_PERIOD_MS);
     }
 }
 
@@ -83,11 +85,11 @@ void app_main(void)
     vTaskDelay(pdMS_TO_TICKS(100));
     listSystemInfo();
     SPI12864 *spiScreen = new SPI12864(GPIO_NUM_21, GPIO_NUM_18, GPIO_NUM_15, GPIO_NUM_23, GPIO_NUM_19);
-    xTaskCreate( &screenUpdate, "ScreenUpdateTask", 90000, spiScreen, 2, NULL );
+    xTaskCreatePinnedToCore( &screenUpdate, "ScreenUpdateTask", 90000, spiScreen, 2, NULL , 1);
     while(1) {
         TaskHandle_t handle = xTaskGetCurrentTaskHandle();
         printf("主任务，运行在核心：%d 上。\n", xTaskGetAffinity(handle ));
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
+        vTaskDelay(10 / portTICK_PERIOD_MS);
     }
 }
 }

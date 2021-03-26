@@ -183,7 +183,7 @@ void OLED_ShowString(uint8_t x, uint8_t y, uint8_t *chr, uint8_t size)
 	unsigned char j = 0;
 	while (chr[j] != '\0')
 	{
-		if(chr[j] != '\n')
+		if (chr[j] == '\n')
 		{
 			x = 0;
 			if (size == 16)
@@ -191,21 +191,25 @@ void OLED_ShowString(uint8_t x, uint8_t y, uint8_t *chr, uint8_t size)
 			else
 				y += 1;
 		}
-		OLED_ShowChar(x, y, chr[j], size);
-		if (size == 16)
-			x += 8;
 		else
-			x += 6;
-		if (x > 120)
 		{
-			x = 0;
+			OLED_ShowChar(x, y, chr[j], size);
 			if (size == 16)
-				y += 2;
+				x += 8;
 			else
-				y += 1;
+				x += 6;
+			if (x > 120)
+			{
+				x = 0;
+				if (size == 16)
+					y += 2;
+				else
+					y += 1;
+			}
 		}
 		j++;
 	}
+	//printf("%d %d %d %d %d", screenPin.PIN_NUM_DC, screenPin.PIN_NUM_RST, screenPin.PIN_NUM_CS, screenPin.PIN_NUM_CLK, screenPin.PIN_NUM_MOSI);
 }
 //ÏÔÊ¾ºº×Ö
 void OLED_ShowCHinese(uint8_t x, uint8_t y, uint8_t no)
