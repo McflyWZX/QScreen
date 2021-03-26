@@ -603,3 +603,10 @@ F:/ESPprjs/QScreen/build/esp-idf/main/CMakeFiles/__idf_main.dir
 F:/ESPprjs/QScreen/build/esp-idf/main/CMakeFiles/rebuild_cache.dir
 F:/ESPprjs/QScreen/build/esp-idf/main/CMakeFiles/list_install_components.dir
 F:/ESPprjs/QScreen/build/esp-idf/main/CMakeFiles/install/strip.dir
+F:/ESPprjs/QScreen/build/esp-idf/SPI12864/CMakeFiles/__idf_SPI12864.dir
+F:/ESPprjs/QScreen/build/esp-idf/SPI12864/CMakeFiles/install/local.dir
+F:/ESPprjs/QScreen/build/esp-idf/SPI12864/CMakeFiles/install.dir
+F:/ESPprjs/QScreen/build/esp-idf/SPI12864/CMakeFiles/edit_cache.dir
+F:/ESPprjs/QScreen/build/esp-idf/SPI12864/CMakeFiles/rebuild_cache.dir
+F:/ESPprjs/QScreen/build/esp-idf/SPI12864/CMakeFiles/list_install_components.dir
+F:/ESPprjs/QScreen/build/esp-idf/SPI12864/CMakeFiles/install/strip.dir

@@ -108,6 +108,7 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   include("F:/ESPprjs/QScreen/build/esp-idf/unity/cmake_install.cmake")
   include("F:/ESPprjs/QScreen/build/esp-idf/wifi_provisioning/cmake_install.cmake")
   include("F:/ESPprjs/QScreen/build/esp-idf/main/cmake_install.cmake")
+  include("F:/ESPprjs/QScreen/build/esp-idf/SPI12864/cmake_install.cmake")
 
 endif()
 

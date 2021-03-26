@@ -8,5 +8,20 @@
     "idf.espMdfPathWin": "",
     "idf.portWin": "COM3",
     "idf.pythonBinPathWin": "d:\\Espressif\\.espressif\\python_env\\idf4.2_py3.8_env\\Scripts\\python.exe",
-    "idf.toolsPathWin": ""
+    "idf.toolsPathWin": "",
+    "files.associations": {
+        "array": "cpp",
+        "string_view": "cpp",
+        "initializer_list": "cpp",
+        "utility": "cpp",
+        "*.tcc": "cpp",
+        "deque": "cpp",
+        "list": "cpp",
+        "string": "cpp",
+        "unordered_map": "cpp",
+        "unordered_set": "cpp",
+        "vector": "cpp",
+        "system_error": "cpp",
+        "*.ipp": "cpp"
+    }
 }
