@@ -47,7 +47,7 @@ SPI12864::SPI12864(gpio_num_t Pin_DC, gpio_num_t Pin_RST, gpio_num_t Pin_CS, gpi
     gpio_set_direction(screenPin.PIN_NUM_CLK, GPIO_MODE_OUTPUT);
     gpio_set_direction(screenPin.PIN_NUM_MOSI, GPIO_MODE_OUTPUT);
 
-    printf("%d %d %d %d %d", screenPin.PIN_NUM_DC, screenPin.PIN_NUM_RST, screenPin.PIN_NUM_CS, screenPin.PIN_NUM_CLK, screenPin.PIN_NUM_MOSI);
+    //printf("%d %d %d %d %d", screenPin.PIN_NUM_DC, screenPin.PIN_NUM_RST, screenPin.PIN_NUM_CS, screenPin.PIN_NUM_CLK, screenPin.PIN_NUM_MOSI);
 
     OLED_Init();
 }

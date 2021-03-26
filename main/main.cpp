@@ -1,7 +1,7 @@
 /*
  * @Author: Mcfly
  * @Date: 2021-03-26 19:11:07
- * @LastEditTime: 2021-03-26 23:37:07
+ * @LastEditTime: 2021-03-27 00:26:07
  * @LastEditors: Mcfly
  * @Description: 
  * @FilePath: \QScreen\main\main.cpp
@@ -31,6 +31,7 @@
 #include "esp_spi_flash.h"
 #include "driver/gpio.h"
 #include "SPI12864.hpp"
+#include <sstream>
 #include "sdkconfig.h"
 
 /* Can use project configuration menu (idf.py menuconfig) to choose the GPIO to blink,
@@ -58,15 +59,32 @@ void listSystemInfo(void)
 
     printf("Free heap: %d\n", esp_get_free_heap_size());
 }
+
+void screenUpdate(void *spiScreen)
+{
+    SPI12864 *screen = (SPI12864*)spiScreen;
+    uint64_t i = 0;
+    while(1)
+    {
+        std::stringstream ss;
+        ss << "      Meeting across mountains and seas.\n" << "times of running:\n" << i;
+        screen->showString(0, 1, (uint8_t*)ss.str().c_str(), 6);
+        TaskHandle_t handle = xTaskGetCurrentTaskHandle();
+        printf("屏幕显示任务，运行在核心：%d 上。\n", xTaskGetAffinity(handle ));
+        vTaskDelay(10 / portTICK_PERIOD_MS);
+    }
+}
+
 extern "C"
 {
     
 void app_main(void)
 {
+    vTaskDelay(pdMS_TO_TICKS(100));
     listSystemInfo();
-    SPI12864 spiScreen(GPIO_NUM_21, GPIO_NUM_18, GPIO_NUM_15, GPIO_NUM_23, GPIO_NUM_19);
+    SPI12864 *spiScreen = new SPI12864(GPIO_NUM_21, GPIO_NUM_18, GPIO_NUM_15, GPIO_NUM_23, GPIO_NUM_19);
+    xTaskCreate( &screenUpdate, "ScreenUpdateTask", 90000, spiScreen, 2, NULL );
     while(1) {
-        spiScreen.showString(0, 1, (uint8_t*)"      Meeting across mountains and seas.", 6);
         TaskHandle_t handle = xTaskGetCurrentTaskHandle();
         printf("主任务，运行在核心：%d 上。\n", xTaskGetAffinity(handle ));
         vTaskDelay(1000 / portTICK_PERIOD_MS);
