@@ -1,7 +1,7 @@
 /*
  * @Author: Mcfly
  * @Date: 2021-03-26 19:11:07
- * @LastEditTime: 2021-03-27 01:03:17
+ * @LastEditTime: 2021-03-27 01:59:36
  * @LastEditors: Mcfly
  * @Description: 
  * @FilePath: \QScreen\main\main.cpp
@@ -71,9 +71,9 @@ void screenUpdate(void *spiScreen)
         ss << "    Meeting across\n mountains and seas.\n\n" << "times of running:\n" << i++;
         ss << "\n" << ti << ti << ti << ti << ti << ti << ti << ti << ti << ti << ti << ti << ti << ti << ti;
         screen->showString(0, 1, (uint8_t*)ss.str().c_str(), 6);
-        TaskHandle_t handle = xTaskGetCurrentTaskHandle();
-        printf("屏幕显示任务，运行在核心：%d 上。\n", xTaskGetAffinity(handle ));
-        //vTaskDelay(10 / portTICK_PERIOD_MS);
+        //TaskHandle_t handle = xTaskGetCurrentTaskHandle();
+        //printf("屏幕显示任务，运行在核心：%d 上。\n", xTaskGetAffinity(handle ));
+        vTaskDelay(10 / portTICK_PERIOD_MS);
     }
 }
 
