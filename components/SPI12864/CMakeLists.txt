@@ -1,2 +1,2 @@
-idf_component_register(SRCS "SPI12864.cpp" "oled.cpp"
+idf_component_register(SRCS "SPI12864.cpp"
                     INCLUDE_DIRS "include")
