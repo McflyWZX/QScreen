@@ -1,7 +1,7 @@
 /*
  * @Author: Mcfly
  * @Date: 2021-03-26 19:11:07
- * @LastEditTime: 2021-03-27 01:59:36
+ * @LastEditTime: 2021-03-27 23:29:58
  * @LastEditors: Mcfly
  * @Description: 
  * @FilePath: \QScreen\main\main.cpp
@@ -60,6 +60,16 @@ void listSystemInfo(void)
     printf("Free heap: %d\n", esp_get_free_heap_size());
 }
 
+void testTask(void *v)
+{
+    uint8_t n = *(uint8_t*)v;
+    while(1)
+    {
+        printf("核心测试任务:%d，运行在核心：%d 上。\n", n, xPortGetCoreID());
+        vTaskDelay(10 / portTICK_PERIOD_MS);
+    }
+}
+
 void screenUpdate(void *spiScreen)
 {
     SPI12864 *screen = (SPI12864*)spiScreen;
@@ -71,8 +81,7 @@ void screenUpdate(void *spiScreen)
         ss << "    Meeting across\n mountains and seas.\n\n" << "times of running:\n" << i++;
         ss << "\n" << ti << ti << ti << ti << ti << ti << ti << ti << ti << ti << ti << ti << ti << ti << ti;
         screen->showString(0, 1, (uint8_t*)ss.str().c_str(), 6);
-        //TaskHandle_t handle = xTaskGetCurrentTaskHandle();
-        //printf("屏幕显示任务，运行在核心：%d 上。\n", xTaskGetAffinity(handle ));
+        printf("屏幕显示任务，运行在核心：%d 上。\n", xPortGetCoreID());
         vTaskDelay(10 / portTICK_PERIOD_MS);
     }
 }
@@ -85,10 +94,13 @@ void app_main(void)
     vTaskDelay(pdMS_TO_TICKS(100));
     listSystemInfo();
     SPI12864 *spiScreen = new SPI12864(GPIO_NUM_21, GPIO_NUM_18, GPIO_NUM_15, GPIO_NUM_23, GPIO_NUM_19);
-    xTaskCreatePinnedToCore( &screenUpdate, "ScreenUpdateTask", 90000, spiScreen, 2, NULL , 1);
+    xTaskCreatePinnedToCore( &screenUpdate, "ScreenUpdateTask", 90000, spiScreen, 0, NULL , tskNO_AFFINITY);
+    uint8_t t = 0;
+    xTaskCreatePinnedToCore( &testTask, "testTask1", 2048, &t, 0, NULL , tskNO_AFFINITY);
+    t++;
+    xTaskCreatePinnedToCore( &testTask, "test2Task", 2048, &t, 0, NULL , tskNO_AFFINITY);
     while(1) {
-        TaskHandle_t handle = xTaskGetCurrentTaskHandle();
-        printf("主任务，运行在核心：%d 上。\n", xTaskGetAffinity(handle ));
+        printf("主任务，运行在核心：%d 上。\n", xPortGetCoreID());
         vTaskDelay(10 / portTICK_PERIOD_MS);
     }
 }
