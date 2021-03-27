@@ -1,7 +1,7 @@
 /*
  * @Author: Mcfly
  * @Date: 2021-03-26 19:11:07
- * @LastEditTime: 2021-03-27 23:35:55
+ * @LastEditTime: 2021-03-28 01:52:06
  * @LastEditors: Mcfly
  * @Description: 
  * @FilePath: \QScreen\main\main.cpp
@@ -31,13 +31,15 @@
 #include "esp_spi_flash.h"
 #include "driver/gpio.h"
 #include "SPI12864.hpp"
-#include <sstream>
 #include "sdkconfig.h"
+#include "freertos/timers.h"
 
 /* Can use project configuration menu (idf.py menuconfig) to choose the GPIO to blink,
    or you can edit the following line and set a number here.
 */
 #define BLINK_GPIO CONFIG_BLINK_GPIO
+
+SPI12864 *spiScreen;
 
 void listSystemInfo(void)
 {
@@ -60,20 +62,9 @@ void listSystemInfo(void)
     printf("Free heap: %d\n", esp_get_free_heap_size());
 }
 
-void screenUpdate(void *spiScreen)
+void screenTimer(TimerHandle_t pxTimer)
 {
-    SPI12864 *screen = (SPI12864*)spiScreen;
-    uint64_t i = 0, ti;
-    while(1)
-    {
-        std::stringstream ss;
-        ti = i%100 / 10;
-        ss << "    Meeting across\n mountains and seas.\n\n" << "times of running:\n" << i++;
-        ss << "\n" << ti << ti << ti << ti << ti << ti << ti << ti << ti << ti << ti << ti << ti << ti << ti;
-        screen->showString(0, 1, (uint8_t*)ss.str().c_str(), 6);
-        printf("屏幕显示任务，运行在核心：%d 上。\n", xPortGetCoreID());
-        vTaskDelay(10 / portTICK_PERIOD_MS);
-    }
+    spiScreen->screenUpdate();
 }
 
 extern "C"
@@ -83,8 +74,15 @@ void app_main(void)
 {
     vTaskDelay(pdMS_TO_TICKS(100));
     listSystemInfo();
-    SPI12864 *spiScreen = new SPI12864(GPIO_NUM_21, GPIO_NUM_18, GPIO_NUM_15, GPIO_NUM_23, GPIO_NUM_19);
-    xTaskCreatePinnedToCore( &screenUpdate, "ScreenUpdateTask", 90000, spiScreen, 2, NULL , tskNO_AFFINITY);
+    spiScreen = new SPI12864(GPIO_NUM_21, GPIO_NUM_18, GPIO_NUM_15, GPIO_NUM_23, GPIO_NUM_19);
+    TimerHandle_t xTimer = xTimerCreate(    "ScreenTimer",       // Just a text name, not used by the kernel.
+                                10 / portTICK_PERIOD_MS,   // The timer period in ticks.
+                                pdTRUE,        // The timers will auto-reload themselves when they expire.
+                                NULL,  // Assign each timer a unique id equal to its array index.
+                                screenTimer // Each timer calls the same callback when it expires.
+                            );
+    // The scheduler has not started yet so a block time is not used.
+    xTimerStart( xTimer, 0 );
     while(1) {
         printf("主任务，运行在核心：%d 上。\n", xPortGetCoreID());
         vTaskDelay(10 / portTICK_PERIOD_MS);
