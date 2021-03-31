@@ -1,7 +1,7 @@
 /*
  * @Author: Mcfly
  * @Date: 2021-03-26 20:54:51
- * @LastEditTime: 2021-03-28 02:12:31
+ * @LastEditTime: 2021-04-01 00:46:29
  * @LastEditors: Mcfly
  * @Description: 
  * @FilePath: \QScreen\components\SPI12864\include\SPI12864.hpp
@@ -88,6 +88,7 @@ private:
     void writeByte(uint8_t dat, uint8_t cmd);
 public:
     SPI12864(gpio_num_t Pin_DC, gpio_num_t Pin_RST, gpio_num_t Pin_CS, gpio_num_t Pin_MOSI, gpio_num_t Pin_CLK);
+    SPI12864(spi_host_device_t hspi);
     ~SPI12864();
     void displayOn(void);
     void displayOff(void);

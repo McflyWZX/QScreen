@@ -1,7 +1,7 @@
 /*
  * @Author: Mcfly
  * @Date: 2021-03-26 20:54:51
- * @LastEditTime: 2021-03-28 02:11:21
+ * @LastEditTime: 2021-04-01 00:48:39
  * @LastEditors: Mcfly
  * @Description: 
  * @FilePath: \QScreen\components\SPI12864\SPI12864.cpp
@@ -36,6 +36,17 @@ void SPI12864::screenUpdate()
     printf("屏幕显示任务，运行在核心：%d 上。\n", xPortGetCoreID());
     //printf(ss.str().c_str());
     vTaskDelay(10 / portTICK_PERIOD_MS);
+}
+/**
+ * @description: 初始化SPI屏幕，使用硬件SPI方式
+ * @param {spi_host_device_t} 使用的SPI控制器枚举
+ * @return {SPI12864}
+ * @Author: Mcfly
+ * @Date: 2021-04-01 00:47:33
+ */
+SPI12864::SPI12864(spi_host_device_t hspi)
+{
+    
 }
 
 //PIN_NUM_DC; GPIO_NUM_21
