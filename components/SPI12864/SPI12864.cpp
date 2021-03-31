@@ -1,7 +1,7 @@
 /*
  * @Author: Mcfly
  * @Date: 2021-03-26 20:54:51
- * @LastEditTime: 2021-03-27 17:38:40
+ * @LastEditTime: 2021-03-28 02:11:21
  * @LastEditors: Mcfly
  * @Description: 
  * @FilePath: \QScreen\components\SPI12864\SPI12864.cpp
@@ -12,6 +12,31 @@
 #include "stdlib.h"
 #include "memory.h"
 #include "oledfont.h"
+#include <sstream>
+
+void SPI12864::screenUpdate()
+{
+    std::stringstream ss;
+    ti = i%100 / 10;
+    uint64_t tempT = i;
+    uint32_t ms = i % 100;
+    tempT /= 100;
+    uint32_t s = tempT % 60;
+    tempT /= 60;
+    uint32_t m = tempT % 60;
+    tempT /= 60;
+    uint32_t h = tempT % 24;
+    tempT /= 24;
+    uint32_t d = tempT;
+    i++;
+    ss << "    Meeting across\n mountains and seas.\n\n" << "times of running:\n";
+    ss << "day:" << d << ", " << h << ":" << m << ":" << s << "." << ms;
+    ss << "\n" << ti << ti << ti << ti << ti << ti << ti << ti << ti << ti << ti << ti << ti << ti << ti;
+    showString(0, 1, (uint8_t*)ss.str().c_str(), 6);
+    printf("屏幕显示任务，运行在核心：%d 上。\n", xPortGetCoreID());
+    //printf(ss.str().c_str());
+    vTaskDelay(10 / portTICK_PERIOD_MS);
+}
 
 //PIN_NUM_DC; GPIO_NUM_21
 //PIN_NUM_RST;  GPIO_NUM_18

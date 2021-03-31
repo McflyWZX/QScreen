@@ -1,7 +1,7 @@
 /*
  * @Author: Mcfly
  * @Date: 2021-03-26 20:54:51
- * @LastEditTime: 2021-03-27 17:39:04
+ * @LastEditTime: 2021-03-28 02:12:31
  * @LastEditors: Mcfly
  * @Description: 
  * @FilePath: \QScreen\components\SPI12864\include\SPI12864.hpp
@@ -14,9 +14,13 @@
 #include "driver/spi_master.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "freertos/timers.h"
 class SPI12864
 {
 private:
+    //测试变量 
+    uint64_t i = 810000, ti;
+
     /* data */
     //OLED模式设置
     //0:4线串行模式
@@ -96,6 +100,7 @@ public:
     void setPos(unsigned char x, unsigned char y);
     void showCHinese(uint8_t x, uint8_t y, uint8_t no);
     void drawBMP(unsigned char x0, unsigned char y0, unsigned char x1, unsigned char y1, unsigned char BMP[]);
+    void screenUpdate();
 };
 
 #endif
