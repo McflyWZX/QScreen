@@ -1,9 +1,9 @@
 /*
  * @Author: Mcfly
  * @Date: 2021-03-26 20:54:51
- * @LastEditTime: 2021-04-01 00:46:29
+ * @LastEditTime: 2021-04-02 00:19:20
  * @LastEditors: Mcfly
- * @Description: 
+ * @Description: CPOL=1,CPHA=1
  * @FilePath: \QScreen\components\SPI12864\include\SPI12864.hpp
  * 本人github:https://github.com/McflyWZX
  */
@@ -15,6 +15,7 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/timers.h"
+
 class SPI12864
 {
 private:
@@ -43,6 +44,10 @@ private:
     gpio_num_t PIN_NUM_CS;
     gpio_num_t PIN_NUM_MOSI;
     gpio_num_t PIN_NUM_CLK;
+    
+    spi_device_handle_t spi;
+
+    bool useHard;
 
     void OLED_CS_Clr()
     {
@@ -85,10 +90,17 @@ private:
         gpio_set_level(PIN_NUM_CLK, 1);
     }
     uint32_t oled_pow(uint8_t m, uint8_t n);
-    void writeByte(uint8_t dat, uint8_t cmd);
+    void oledInit();
+    void writeByte(uint8_t dat, uint8_t cmd)
+    {
+        if(useHard)writeByteHard(dat, cmd);
+        else writeByteSimu(dat, cmd);
+    }
+    void writeByteSimu(uint8_t dat, uint8_t cmd);
+    void writeByteHard(uint8_t dat, uint8_t cmd);
 public:
     SPI12864(gpio_num_t Pin_DC, gpio_num_t Pin_RST, gpio_num_t Pin_CS, gpio_num_t Pin_MOSI, gpio_num_t Pin_CLK);
-    SPI12864(spi_host_device_t hspi);
+    SPI12864(spi_host_device_t hspi, gpio_num_t Pin_DC, gpio_num_t Pin_RST, gpio_num_t Pin_CS);
     ~SPI12864();
     void displayOn(void);
     void displayOff(void);

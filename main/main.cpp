@@ -1,7 +1,7 @@
 /*
  * @Author: Mcfly
  * @Date: 2021-03-26 19:11:07
- * @LastEditTime: 2021-03-28 01:52:06
+ * @LastEditTime: 2021-04-02 00:30:16
  * @LastEditors: Mcfly
  * @Description: 
  * @FilePath: \QScreen\main\main.cpp
@@ -33,11 +33,12 @@
 #include "SPI12864.hpp"
 #include "sdkconfig.h"
 #include "freertos/timers.h"
+#include "driver/spi_master.h"
 
 /* Can use project configuration menu (idf.py menuconfig) to choose the GPIO to blink,
    or you can edit the following line and set a number here.
 */
-#define BLINK_GPIO CONFIG_BLINK_GPIO
+#define __cplusplus
 
 SPI12864 *spiScreen;
 
@@ -74,7 +75,7 @@ void app_main(void)
 {
     vTaskDelay(pdMS_TO_TICKS(100));
     listSystemInfo();
-    spiScreen = new SPI12864(GPIO_NUM_21, GPIO_NUM_18, GPIO_NUM_15, GPIO_NUM_23, GPIO_NUM_19);
+    spiScreen = new SPI12864(SPI3_HOST, GPIO_NUM_21, GPIO_NUM_22, GPIO_NUM_15);
     TimerHandle_t xTimer = xTimerCreate(    "ScreenTimer",       // Just a text name, not used by the kernel.
                                 10 / portTICK_PERIOD_MS,   // The timer period in ticks.
                                 pdTRUE,        // The timers will auto-reload themselves when they expire.
