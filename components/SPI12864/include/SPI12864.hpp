@@ -1,7 +1,7 @@
 /*
  * @Author: Mcfly
  * @Date: 2021-03-26 20:54:51
- * @LastEditTime: 2021-04-02 00:19:20
+ * @LastEditTime: 2021-04-02 20:38:11
  * @LastEditors: Mcfly
  * @Description: CPOL=1,CPHA=1
  * @FilePath: \QScreen\components\SPI12864\include\SPI12864.hpp
@@ -15,12 +15,14 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/timers.h"
+#include <sstream>
 
 class SPI12864
 {
 private:
     //测试变量 
-    uint64_t i = 810000, ti;
+    std::stringstream ss;
+    uint64_t i = 0, ti;
 
     /* data */
     //OLED模式设置
@@ -46,6 +48,8 @@ private:
     gpio_num_t PIN_NUM_CLK;
     
     spi_device_handle_t spi;
+
+    spi_transaction_t spi_trans;
 
     bool useHard;
 
