@@ -1,7 +1,7 @@
 /*
  * @Author: Mcfly
  * @Date: 2021-03-26 20:54:51
- * @LastEditTime: 2021-03-28 02:11:21
+ * @LastEditTime: 2021-04-02 21:13:07
  * @LastEditors: Mcfly
  * @Description: 
  * @FilePath: \QScreen\components\SPI12864\SPI12864.cpp
@@ -12,11 +12,12 @@
 #include "stdlib.h"
 #include "memory.h"
 #include "oledfont.h"
-#include <sstream>
+#include "driver/spi_master.h"
 
 void SPI12864::screenUpdate()
 {
-    std::stringstream ss;
+    ss.clear();
+    ss.str("");
     ti = i%100 / 10;
     uint64_t tempT = i;
     uint32_t ms = i % 100;
@@ -28,14 +29,69 @@ void SPI12864::screenUpdate()
     uint32_t h = tempT % 24;
     tempT /= 24;
     uint32_t d = tempT;
-    i++;
+    i+=1;
     ss << "    Meeting across\n mountains and seas.\n\n" << "times of running:\n";
     ss << "day:" << d << ", " << h << ":" << m << ":" << s << "." << ms;
     ss << "\n" << ti << ti << ti << ti << ti << ti << ti << ti << ti << ti << ti << ti << ti << ti << ti;
     showString(0, 1, (uint8_t*)ss.str().c_str(), 6);
-    printf("屏幕显示任务，运行在核心：%d 上。\n", xPortGetCoreID());
+    //printf("屏幕显示任务，运行在核心：%d 上。\n", xPortGetCoreID());
     //printf(ss.str().c_str());
-    vTaskDelay(10 / portTICK_PERIOD_MS);
+}
+/*#define OLED_HOST    SPI3_HOST 
+#define DMA_CHAN    2
+
+#define PIN_MOSI 23
+#define PIN_CLK  18
+#define PIN_CS   15
+
+#define PIN_DC   21
+#define PIN_RST  22*/
+/**
+ * @description: 初始化SPI屏幕，使用硬件SPI方式
+ * @param {spi_host_device_t} 使用的SPI控制器枚举
+ * @return {SPI12864}
+ * @Author: Mcfly
+ * @Date: 2021-04-01 00:47:33
+ */
+//uint16_t data = SPI_SWAP_DATA_TX(0x145, 9);
+SPI12864::SPI12864(spi_host_device_t hspi, gpio_num_t Pin_DC, gpio_num_t Pin_RST, gpio_num_t Pin_CS)
+{
+    useHard = 1;
+    
+    PIN_NUM_DC = Pin_DC;
+    PIN_NUM_RST = Pin_RST;
+    PIN_NUM_CS = Pin_CS;
+
+    esp_err_t ret;
+    spi_bus_config_t buscfg;
+    memset(&buscfg, 0, sizeof(spi_bus_config_t));
+        buscfg.miso_io_num=-1;
+        buscfg.mosi_io_num=GPIO_NUM_23;
+        buscfg.sclk_io_num=GPIO_NUM_18;
+        buscfg.quadwp_io_num=-1;
+        buscfg.quadhd_io_num=-1;
+        buscfg.max_transfer_sz=256*256;
+        //buscfg.flags=SPICOMMON_BUSFLAG_MASTER;
+        //buscfg.intr_flags=0;
+   
+    spi_device_interface_config_t devcfg;
+    memset(&devcfg, 0, sizeof(spi_device_interface_config_t));
+        devcfg.clock_speed_hz=80*1000*1000;
+        devcfg.mode=0;
+        devcfg.spics_io_num=-1;
+        devcfg.queue_size=256;
+        //devcfg.flags=SPI_DEVICE_HALFDUPLEX;
+ 
+    //Initialize the SPI bus
+    ret=spi_bus_initialize(hspi, &buscfg, 0);
+    ESP_ERROR_CHECK(ret);
+    //Attach the LCD to the SPI bus
+    ret=spi_bus_add_device(hspi, &devcfg, &spi);
+
+    memset(&spi_trans, 0, sizeof(spi_trans));       //Zero out the transaction
+    spi_trans.length=8;                 //Len is in bytes, transaction length is in bits.
+
+    oledInit();
 }
 
 //PIN_NUM_DC; GPIO_NUM_21
@@ -56,6 +112,8 @@ void SPI12864::screenUpdate()
  */
 SPI12864::SPI12864(gpio_num_t Pin_DC, gpio_num_t Pin_RST, gpio_num_t Pin_CS, gpio_num_t Pin_MOSI, gpio_num_t Pin_CLK)
 {
+    useHard = 0;
+
     PIN_NUM_DC = Pin_DC;
     PIN_NUM_RST = Pin_RST;
     PIN_NUM_CS = Pin_CS;
@@ -63,20 +121,29 @@ SPI12864::SPI12864(gpio_num_t Pin_DC, gpio_num_t Pin_RST, gpio_num_t Pin_CS, gpi
     PIN_NUM_CLK = Pin_CLK;
 
     //Initialize non-SPI GPIOs
+    gpio_pad_select_gpio(PIN_NUM_CLK);
+    gpio_pad_select_gpio(PIN_NUM_MOSI);
+
+    gpio_set_direction(PIN_NUM_CLK, GPIO_MODE_OUTPUT);
+    gpio_set_direction(PIN_NUM_MOSI, GPIO_MODE_OUTPUT);
+
+    oledInit();
+
+    //printf("%d %d %d %d %d", screenPin.PIN_NUM_DC, screenPin.PIN_NUM_RST, screenPin.PIN_NUM_CS, screenPin.PIN_NUM_CLK, screenPin.PIN_NUM_MOSI);
+
+    
+}
+
+void SPI12864::oledInit()
+{
     gpio_pad_select_gpio(PIN_NUM_DC);
     gpio_pad_select_gpio(PIN_NUM_RST);
     gpio_pad_select_gpio(PIN_NUM_CS);
-    gpio_pad_select_gpio(PIN_NUM_CLK);
-    gpio_pad_select_gpio(PIN_NUM_MOSI);
 
     gpio_set_direction(PIN_NUM_DC, GPIO_MODE_OUTPUT);
     gpio_set_direction(PIN_NUM_RST, GPIO_MODE_OUTPUT);
     gpio_set_direction(PIN_NUM_CS, GPIO_MODE_OUTPUT);
-    gpio_set_direction(PIN_NUM_CLK, GPIO_MODE_OUTPUT);
-    gpio_set_direction(PIN_NUM_MOSI, GPIO_MODE_OUTPUT);
-
-    //printf("%d %d %d %d %d", screenPin.PIN_NUM_DC, screenPin.PIN_NUM_RST, screenPin.PIN_NUM_CS, screenPin.PIN_NUM_CLK, screenPin.PIN_NUM_MOSI);
-
+    
     OLED_RST_Set();
     vTaskDelay(200 / portTICK_PERIOD_MS);
     OLED_RST_Clr();
@@ -117,7 +184,7 @@ SPI12864::SPI12864(gpio_num_t Pin_DC, gpio_num_t Pin_RST, gpio_num_t Pin_CS, gpi
     setPos(0, 0);
 }
 
-void SPI12864::writeByte(uint8_t dat, uint8_t cmd)
+void SPI12864::writeByteSimu(uint8_t dat, uint8_t cmd)
 {
     if (cmd)
         OLED_DC_Set();
@@ -134,6 +201,26 @@ void SPI12864::writeByte(uint8_t dat, uint8_t cmd)
         OLED_SCLK_Set();
         dat <<= 1;
     }
+
+    OLED_CS_Set();
+    OLED_DC_Set();
+}
+
+void SPI12864::writeByteHard(uint8_t dat, uint8_t cmd)
+{
+    if (cmd)
+        OLED_DC_Set();
+    else
+        OLED_DC_Clr();
+    OLED_CS_Clr();
+
+    //esp_err_t ret;
+    
+    spi_trans.tx_buffer=&dat;               //Data
+    //spi_device_polling_transmit(spi, &spi_trans);  //Transmit!
+    //spi_device_transmit(spi, &spi_trans);
+    spi_device_queue_trans(spi, &spi_trans, 2 / portTICK_PERIOD_MS);
+    //assert(ret==ESP_OK);            //Should have had no issues.
 
     OLED_CS_Set();
     OLED_DC_Set();
