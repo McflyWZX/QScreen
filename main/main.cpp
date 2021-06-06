@@ -44,7 +44,7 @@
 #define __cplusplus
 
 #define DEFAULT_VREF 3300 //Use adc2_vref_to_gpio() to obtain a better estimate
-#define NO_OF_SAMPLES 16   //Multisampling
+#define NO_OF_SAMPLES 64   //Multisampling
 
 static esp_adc_cal_characteristics_t *adc_chars;
 
@@ -162,6 +162,7 @@ extern "C"
                 for (int i = 0; i < NO_OF_SAMPLES; i++)
                 {
                     adc_reading += adc1_get_raw((adc1_channel_t)channel);
+                    vTaskDelay(100 / portTICK_PERIOD_MS);
                 }
                 adc_reading /= NO_OF_SAMPLES;
                 //Convert adc_reading to voltage in mV
@@ -170,7 +171,7 @@ extern "C"
                 spiScreen.showString(0, 20, strBuf, MAGENTA);
                 //printf("Raw: %d\tVoltage: %dmV\n", adc_reading, voltage);
                 //vTaskDelay(pdMS_TO_TICKS(1000));
-                vTaskDelay(10 / portTICK_PERIOD_MS);
+                vTaskDelay(4000 / portTICK_PERIOD_MS);
             }
         }
     }
