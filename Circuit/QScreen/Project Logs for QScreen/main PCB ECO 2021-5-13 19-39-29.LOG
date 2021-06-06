@@ -1,0 +1,58 @@
+Removed Pin From Net: NetName=D+ Pin=D1-1
+Removed Pin From Net: NetName=GND Pin=D1-2
+Removed Pin From Net: NetName=D- Pin=D2-1
+Removed Pin From Net: NetName=GND Pin=D2-2
+Removed Pin From Net: NetName=GND Pin=R1-1
+Removed Pin From Net: NetName=GND Pin=R2-2
+Removed Pin From Net: NetName=GND Pin=U2-0
+Removed Pin From Net: NetName=GND Pin=U5-0
+Removed Member From Class: ClassName=main Member=D1
+Removed Member From Class: ClassName=main Member=D2
+Removed Member From Class: ClassName=main Member=R1
+Removed Member From Class: ClassName=main Member=R2
+Change Component Comment : Designator=L3 Old Comment=L/A New Comment=2.0nH
+Change Component Comment : Designator=R8 Old Comment=RES New Comment=20K
+Added Component: Designator=D7(DFN1006-2)
+Add component. Clean all parameters for all variants
+Added Component: Designator=D8(DFN1006-2)
+Add component. Clean all parameters for all variants
+Added Component: Designator=R19(R0603)
+Add component. Clean all parameters for all variants
+Added Component: Designator=R20(R0603)
+Add component. Clean all parameters for all variants
+Added Component: Designator=USBC1(TYPE-C-USB-17)
+Add component. Clean all parameters for all variants
+Added Pin To Net: NetName=D+ Pin=D7-1
+Added Pin To Net: NetName=GND Pin=D7-2
+Added Pin To Net: NetName=D- Pin=D8-1
+Added Pin To Net: NetName=GND Pin=D8-2
+Added Pin To Net: NetName=GND Pin=R19-1
+Added Pin To Net: NetName=GND Pin=R20-2
+Added Pin To Net: NetName=GND Pin=USBC1-0
+Added Pin To Net: NetName=GND Pin=USBC1-0
+Added Pin To Net: NetName=GND Pin=USBC1-0
+Added Pin To Net: NetName=GND Pin=USBC1-0
+Added Pin To Net: NetName=GND Pin=USBC1-A1
+Added Pin To Net: NetName=VBUS_5V Pin=USBC1-A4
+Added Pin To Net: NetName=D+ Pin=USBC1-A6
+Added Pin To Net: NetName=D- Pin=USBC1-A7
+Added Pin To Net: NetName=VBUS_5V Pin=USBC1-A9
+Added Pin To Net: NetName=GND Pin=USBC1-A12
+Added Pin To Net: NetName=GND Pin=USBC1-B1
+Added Pin To Net: NetName=VBUS_5V Pin=USBC1-B4
+Added Pin To Net: NetName=D+ Pin=USBC1-B6
+Added Pin To Net: NetName=D- Pin=USBC1-B7
+Added Pin To Net: NetName=VBUS_5V Pin=USBC1-B9
+Added Pin To Net: NetName=GND Pin=USBC1-B12
+Added Pin To Net: NetName=NetR19_2 Pin=R19-2
+Added Pin To Net: NetName=NetR19_2 Pin=USBC1-B5
+Added Net: Name=NetR19_2
+Added Pin To Net: NetName=NetR20_1 Pin=R20-1
+Added Pin To Net: NetName=NetR20_1 Pin=USBC1-A5
+Added Net: Name=NetR20_1
+Added Member To Class: ClassName=main Member=Component C16 10nF
+Added Member To Class: ClassName=main Member=Component D7 TPESD5311N
+Added Member To Class: ClassName=main Member=Component D8 TPESD5311N
+Added Member To Class: ClassName=main Member=Component R19 5.1K
+Added Member To Class: ClassName=main Member=Component R20 5.1K
+Added Member To Class: ClassName=main Member=Component USBC1 USB3.1C16PFSMT

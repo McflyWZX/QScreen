@@ -1,0 +1,340 @@
+Removed Member From Class: ClassName=main Member=X?
+Added Component: Designator=C?(0603)
+Add component. Clean all parameters for all variants
+Added Component: Designator=C?(0603)
+Add component. Clean all parameters for all variants
+Added Component: Designator=C?(C0603)
+Add component. Clean all parameters for all variants
+Added Component: Designator=C?(C0603)
+Add component. Clean all parameters for all variants
+Added Component: Designator=C?(C0603)
+Add component. Clean all parameters for all variants
+Added Component: Designator=C?(C0603)
+Add component. Clean all parameters for all variants
+Added Component: Designator=C?(C0603)
+Add component. Clean all parameters for all variants
+Added Component: Designator=C?(C0603)
+Add component. Clean all parameters for all variants
+Added Component: Designator=C?(C0603)
+Add component. Clean all parameters for all variants
+Added Component: Designator=C?(C0603)
+Add component. Clean all parameters for all variants
+Added Component: Designator=C?(C0603)
+Add component. Clean all parameters for all variants
+Added Component: Designator=C?(C0603)
+Add component. Clean all parameters for all variants
+Added Component: Designator=C?(C0603)
+Add component. Clean all parameters for all variants
+Added Component: Designator=C?(C0603)
+Add component. Clean all parameters for all variants
+Added Component: Designator=C?(C0603)
+Add component. Clean all parameters for all variants
+Added Component: Designator=C?(C0603)
+Add component. Clean all parameters for all variants
+Added Component: Designator=CT?(C1206)
+Add component. Clean all parameters for all variants
+Added Component: Designator=CT?(C1206)
+Add component. Clean all parameters for all variants
+Added Component: Designator=CT?(C1206)
+Add component. Clean all parameters for all variants
+Added Component: Designator=CT?(C1206)
+Add component. Clean all parameters for all variants
+Added Component: Designator=CT?(C1206)
+Add component. Clean all parameters for all variants
+Added Component: Designator=D?(DFN1006-2)
+Add component. Clean all parameters for all variants
+Added Component: Designator=D?(DFN1006-2)
+Add component. Clean all parameters for all variants
+Added Component: Designator=J?(IPEX gen1)
+Add component. Clean all parameters for all variants
+Added Component: Designator=L?(L0603)
+Add component. Clean all parameters for all variants
+Added Component: Designator=LS?(PIN2)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "17-Jul-2002"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionNote"; Value = "Re-released for DXP Platform."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PackageReference"; Value = "PIN2"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Published"; Value = "24-Mar-1999"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Added Component: Designator=R?(R0603)
+Add component. Clean all parameters for all variants
+Added Component: Designator=R?(0603)
+Add component. Clean all parameters for all variants
+Added Component: Designator=R?(R0603)
+Add component. Clean all parameters for all variants
+Added Component: Designator=R?(R0603)
+Add component. Clean all parameters for all variants
+Added Component: Designator=R?(R0603)
+Add component. Clean all parameters for all variants
+Added Component: Designator=R?(R0603)
+Add component. Clean all parameters for all variants
+Added Component: Designator=R?(R0603)
+Add component. Clean all parameters for all variants
+Added Component: Designator=R?(R0603)
+Add component. Clean all parameters for all variants
+Added Component: Designator=R?(R0603)
+Add component. Clean all parameters for all variants
+Added Component: Designator=R?(R0603)
+Add component. Clean all parameters for all variants
+Added Component: Designator=R?(R0603)
+Add component. Clean all parameters for all variants
+Added Component: Designator=RP?(RP4)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "Code_IPC"; Value = "SOIC127P600-16"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Code_JEDEC"; Value = "MS-012-AC"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "29-May-2009"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionNote"; Value = "IPC-7351 Footprint Added."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PackageDescription"; Value = "16-Pin Small Outline Integrated Circuit 1.27 mm Pitch"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PackageReference"; Value = "SO-16"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Published"; Value = "24-Mar-1999"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Added Component: Designator=RP?(RP4)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "Code_IPC"; Value = "SOIC127P600-16"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Code_JEDEC"; Value = "MS-012-AC"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "29-May-2009"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionNote"; Value = "IPC-7351 Footprint Added."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PackageDescription"; Value = "16-Pin Small Outline Integrated Circuit 1.27 mm Pitch"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PackageReference"; Value = "SO-16"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Published"; Value = "24-Mar-1999"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Added Component: Designator=SW?(microswitch)
+Add component. Clean all parameters for all variants
+Added Component: Designator=SW?(microswitch)
+Add component. Clean all parameters for all variants
+Added Component: Designator=T?(STO-23)
+Add component. Clean all parameters for all variants
+Added Component: Designator=T?(STO-23)
+Add component. Clean all parameters for all variants
+Added Component: Designator=TF?(TF_3)
+Add component. Clean all parameters for all variants
+Added Component: Designator=U?(QFN-28)
+Add component. Clean all parameters for all variants
+Added Component: Designator=U?(MSOP-8)
+Add component. Clean all parameters for all variants
+Added Component: Designator=Y?(SMD-2016-4P)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "Value"; Value = "30M"; VariantName = "[No Variations]"
+Added Component: Designator=Y?(XTAL1)
+Add component. Clean all parameters for all variants
+Added Pin To Net: NetName=+3.3 Pin=C?-1
+Added Pin To Net: NetName=GND Pin=C?-1
+Added Pin To Net: NetName=GND Pin=C?-1
+Added Pin To Net: NetName=GND Pin=C?-1
+Added Pin To Net: NetName=GND Pin=C?-1
+Added Pin To Net: NetName=GND Pin=C?-1
+Added Pin To Net: NetName=GND Pin=C?-1
+Added Pin To Net: NetName=GND Pin=C?-1
+Added Pin To Net: NetName=GND Pin=C?-1
+Added Pin To Net: NetName=GND Pin=C?-1
+Added Pin To Net: NetName=GND Pin=C?-1
+Added Pin To Net: NetName=GND Pin=C?-1
+Added Pin To Net: NetName=GND Pin=C?-1
+Added Pin To Net: NetName=+3.3 Pin=C?-2
+Added Pin To Net: NetName=+3.3 Pin=C?-2
+Added Pin To Net: NetName=+3.3 Pin=C?-2
+Added Pin To Net: NetName=GND Pin=C?-2
+Added Pin To Net: NetName=GND Pin=C?-2
+Added Pin To Net: NetName=VBUS_5V Pin=C?-2
+Added Pin To Net: NetName=+3.3 Pin=CT?-1
+Added Pin To Net: NetName=+3.3 Pin=CT?-1
+Added Pin To Net: NetName=VBUS_5V Pin=CT?-1
+Added Pin To Net: NetName=GND Pin=CT?-2
+Added Pin To Net: NetName=GND Pin=CT?-2
+Added Pin To Net: NetName=GND Pin=CT?-2
+Added Pin To Net: NetName=GND Pin=CT?-2
+Added Pin To Net: NetName=GND Pin=CT?-2
+Added Pin To Net: NetName=D+ Pin=D?-1
+Added Pin To Net: NetName=D- Pin=D?-1
+Added Pin To Net: NetName=GND Pin=D?-2
+Added Pin To Net: NetName=GND Pin=D?-2
+Added Pin To Net: NetName=GND Pin=J?-2
+Added Pin To Net: NetName=GND Pin=J?-2
+Added Pin To Net: NetName=+3.3 Pin=R?-1
+Added Pin To Net: NetName=GND Pin=SW?-1
+Added Pin To Net: NetName=GND Pin=SW?-1
+Added Pin To Net: NetName=+3.3 Pin=TF?-4
+Added Pin To Net: NetName=GND Pin=TF?-6
+Added Pin To Net: NetName=GND Pin=TF?-9
+Added Pin To Net: NetName=GND Pin=TF?-10
+Added Pin To Net: NetName=GND Pin=U?-3
+Added Pin To Net: NetName=D+ Pin=U?-4
+Added Pin To Net: NetName=D- Pin=U?-5
+Added Pin To Net: NetName=+3.3 Pin=U?-6
+Added Pin To Net: NetName=+3.3 Pin=U?-7
+Added Pin To Net: NetName=GND Pin=U?-7
+Added Pin To Net: NetName=VBUS_5V Pin=U?-8
+Added Pin To Net: NetName=GND Pin=U?-29
+Added Pin To Net: NetName=GND Pin=USBC?-S
+Added Pin To Net: NetName=GND Pin=USBC?-S
+Added Pin To Net: NetName=GND Pin=USBC?-S
+Added Pin To Net: NetName=GND Pin=USBC?-S
+Added Pin To Net: NetName=GND Pin=Y?-2
+Added Pin To Net: NetName=+3.3 Pin=Y?-4
+Added Pin To Net: NetName=32K_XN Pin=C?-2
+Added Pin To Net: NetName=32K_XN Pin=R?-1
+Added Pin To Net: NetName=32K_XN Pin=U?-13
+Added Pin To Net: NetName=32K_XN Pin=Y?-1
+Added Net: Name=32K_XN
+Added Pin To Net: NetName=32K_XP Pin=C?-2
+Added Pin To Net: NetName=32K_XP Pin=R?-2
+Added Pin To Net: NetName=32K_XP Pin=U?-12
+Added Pin To Net: NetName=32K_XP Pin=Y?-2
+Added Net: Name=32K_XP
+Added Pin To Net: NetName=AMP_S\H\D\ Pin=U?-1
+Added Pin To Net: NetName=AMP_S\H\D\ Pin=U?-16
+Added Net: Name=AMP_S\H\D\
+Added Pin To Net: NetName=DAC_OUT Pin=C?-1
+Added Pin To Net: NetName=DAC_OUT Pin=U?-15
+Added Net: Name=DAC_OUT
+Added Pin To Net: NetName=DTR Pin=R?-1
+Added Pin To Net: NetName=DTR Pin=T?-2
+Added Pin To Net: NetName=DTR Pin=U?-28
+Added Net: Name=DTR
+Added Pin To Net: NetName=EN Pin=C?-2
+Added Pin To Net: NetName=EN Pin=R?-1
+Added Pin To Net: NetName=EN Pin=R?-2
+Added Pin To Net: NetName=EN Pin=T?-3
+Added Pin To Net: NetName=EN Pin=U?-9
+Added Net: Name=EN
+Added Pin To Net: NetName=IO0 Pin=R?-1
+Added Pin To Net: NetName=IO0 Pin=T?-3
+Added Pin To Net: NetName=IO0 Pin=U?-23
+Added Net: Name=IO0
+Added Pin To Net: NetName=LNA_IN Pin=C?-2
+Added Pin To Net: NetName=LNA_IN Pin=L?-2
+Added Pin To Net: NetName=LNA_IN Pin=U?-2
+Added Net: Name=LNA_IN
+Added Pin To Net: NetName=NetC?_1 Pin=C?-1
+Added Pin To Net: NetName=NetC?_1 Pin=C?-1
+Added Pin To Net: NetName=NetC?_1 Pin=R?-1
+Added Pin To Net: NetName=NetC?_1 Pin=U?-48
+Added Net: Name=NetC?_1
+Added Pin To Net: NetName=NetC?_2 Pin=C?-2
+Added Pin To Net: NetName=NetC?_2 Pin=R?-1
+Added Net: Name=NetC?_2
+Added Pin To Net: NetName=NetLS?_1 Pin=LS?-1
+Added Pin To Net: NetName=NetLS?_1 Pin=U?-8
+Added Net: Name=NetLS?_1
+Added Pin To Net: NetName=NetLS?_2 Pin=LS?-2
+Added Pin To Net: NetName=NetLS?_2 Pin=R?-2
+Added Pin To Net: NetName=NetLS?_2 Pin=U?-5
+Added Net: Name=NetLS?_2
+Added Pin To Net: NetName=NetRP?_5 Pin=RP?-5
+Added Pin To Net: NetName=NetRP?_5 Pin=RP?-5
+Added Pin To Net: NetName=NetRP?_5 Pin=RP?-6
+Added Pin To Net: NetName=NetRP?_5 Pin=RP?-6
+Added Pin To Net: NetName=NetRP?_5 Pin=RP?-7
+Added Pin To Net: NetName=NetRP?_5 Pin=RP?-7
+Added Pin To Net: NetName=NetRP?_5 Pin=RP?-8
+Added Pin To Net: NetName=NetRP?_5 Pin=RP?-8
+Added Net: Name=NetRP?_5
+Added Pin To Net: NetName=RTS Pin=R?-1
+Added Pin To Net: NetName=RTS Pin=T?-2
+Added Pin To Net: NetName=RTS Pin=U?-24
+Added Net: Name=RTS
+Added Pin To Net: NetName=RXD0 Pin=R?-2
+Added Pin To Net: NetName=RXD0 Pin=U?-40
+Added Net: Name=RXD0
+Added Pin To Net: NetName=TF_CLK Pin=RP?-4
+Added Pin To Net: NetName=TF_CLK Pin=TF?-5
+Added Pin To Net: NetName=TF_CLK Pin=U?-17
+Added Net: Name=TF_CLK
+Added Pin To Net: NetName=TF_CMD Pin=RP?-3
+Added Pin To Net: NetName=TF_CMD Pin=TF?-3
+Added Pin To Net: NetName=TF_CMD Pin=U?-21
+Added Net: Name=TF_CMD
+Added Pin To Net: NetName=TF_D0 Pin=RP?-1
+Added Pin To Net: NetName=TF_D0 Pin=TF?-7
+Added Pin To Net: NetName=TF_D0 Pin=U?-22
+Added Net: Name=TF_D0
+Added Pin To Net: NetName=TF_D1 Pin=RP?-2
+Added Pin To Net: NetName=TF_D1 Pin=TF?-8
+Added Pin To Net: NetName=TF_D1 Pin=U?-24
+Added Net: Name=TF_D1
+Added Pin To Net: NetName=TF_D2 Pin=RP?-1
+Added Pin To Net: NetName=TF_D2 Pin=TF?-1
+Added Pin To Net: NetName=TF_D2 Pin=U?-18
+Added Net: Name=TF_D2
+Added Pin To Net: NetName=TF_D3 Pin=RP?-2
+Added Pin To Net: NetName=TF_D3 Pin=TF?-2
+Added Pin To Net: NetName=TF_D3 Pin=U?-20
+Added Net: Name=TF_D3
+Added Pin To Net: NetName=TXD0 Pin=R?-2
+Added Pin To Net: NetName=TXD0 Pin=U?-25
+Added Net: Name=TXD0
+Added Pin To Net: NetName=XTAL_P Pin=C?-2
+Added Pin To Net: NetName=XTAL_P Pin=U?-45
+Added Pin To Net: NetName=XTAL_P Pin=Y?-3
+Added Net: Name=XTAL_P
+Added Member To Class: ClassName=main Member=Component C? 100nF
+Added Member To Class: ClassName=main Member=Component C? 100nF
+Added Member To Class: ClassName=main Member=Component C? 100nF
+Added Member To Class: ClassName=main Member=Component C? 100nF
+Added Member To Class: ClassName=main Member=Component C? 100nF
+Added Member To Class: ClassName=main Member=Component C? 100nF
+Added Member To Class: ClassName=main Member=Component C? 100nF
+Added Member To Class: ClassName=main Member=Component C? 12pF
+Added Member To Class: ClassName=main Member=Component C? 100nF
+Added Member To Class: ClassName=main Member=Component C? 18pF
+Added Member To Class: ClassName=main Member=Component C? 18pF
+Added Member To Class: ClassName=main Member=Component C? 104
+Added Member To Class: ClassName=main Member=Component C? 104
+Added Member To Class: ClassName=main Member=Component C? 3.3nF
+Added Member To Class: ClassName=main Member=Component C? 10nF
+Added Member To Class: ClassName=main Member=Component C? 100nF
+Added Member To Class: ClassName=main Member=Component C? 100nF
+Added Member To Class: ClassName=main Member=Component C? 100nF
+Added Member To Class: ClassName=main Member=Component C? 103
+Added Member To Class: ClassName=main Member=Component C? 103
+Added Member To Class: ClassName=main Member=Component C? 100nF
+Added Member To Class: ClassName=main Member=Component C? 390nF
+Added Member To Class: ClassName=main Member=Component CT? 22uF
+Added Member To Class: ClassName=main Member=Component CT? 10uF
+Added Member To Class: ClassName=main Member=Component CT? 10uF
+Added Member To Class: ClassName=main Member=Component CT? 10uF
+Added Member To Class: ClassName=main Member=Component CT? 10uF
+Added Member To Class: ClassName=main Member=Component CT? 47uF
+Added Member To Class: ClassName=main Member=Component CT? 1uF
+Added Member To Class: ClassName=main Member=Component CT? 10uF
+Added Member To Class: ClassName=main Member=Component CT? 1uF
+Added Member To Class: ClassName=main Member=Component CT? 10uF
+Added Member To Class: ClassName=main Member=Component CT? 10uF
+Added Member To Class: ClassName=main Member=Component CT? 10uF
+Added Member To Class: ClassName=main Member=Component CT? 10uF
+Added Member To Class: ClassName=main Member=Component CT? 1uF
+Added Member To Class: ClassName=main Member=Component D? LED
+Added Member To Class: ClassName=main Member=Component D? LED
+Added Member To Class: ClassName=main Member=Component D? TPESD5311N
+Added Member To Class: ClassName=main Member=Component J? IPEX gen1
+Added Member To Class: ClassName=main Member=Component L? L/A
+Added Member To Class: ClassName=main Member=Component L? L/A
+Added Member To Class: ClassName=main Member=Component LS? Speaker
+Added Member To Class: ClassName=main Member=Component R? 1.2K
+Added Member To Class: ClassName=main Member=Component R? 1K
+Added Member To Class: ClassName=main Member=Component R? 5.1K
+Added Member To Class: ClassName=main Member=Component R? 5.1K
+Added Member To Class: ClassName=main Member=Component R? 6M
+Added Member To Class: ClassName=main Member=Component R? RES
+Added Member To Class: ClassName=main Member=Component R? 12K
+Added Member To Class: ClassName=main Member=Component R? 12K
+Added Member To Class: ClassName=main Member=Component R? 470
+Added Member To Class: ClassName=main Member=Component R? 499
+Added Member To Class: ClassName=main Member=Component R? 12K
+Added Member To Class: ClassName=main Member=Component R? 470
+Added Member To Class: ClassName=main Member=Component R? 470
+Added Member To Class: ClassName=main Member=Component R? 20K
+Added Member To Class: ClassName=main Member=Component RP? R
+Added Member To Class: ClassName=main Member=Component RP? R
+Added Member To Class: ClassName=main Member=Component SW? switch
+Added Member To Class: ClassName=main Member=Component SW? switch
+Added Member To Class: ClassName=main Member=Component T? 8050
+Added Member To Class: ClassName=main Member=Component T? 8050
+Added Member To Class: ClassName=main Member=Component TF? TF
+Added Member To Class: ClassName=main Member=Component U? TP410x
+Added Member To Class: ClassName=main Member=Component U? ESP32-D0WDQ6
+Added Member To Class: ClassName=main Member=Component U? TPS63024YFFR
+Added Member To Class: ClassName=main Member=Component U? W25Q128JVPQ
+Added Member To Class: ClassName=main Member=Component U? CP2102
+Added Member To Class: ClassName=main Member=Component Y? 30M
+Added Member To Class: ClassName=main Member=Component Y? 32.768 12.5pF

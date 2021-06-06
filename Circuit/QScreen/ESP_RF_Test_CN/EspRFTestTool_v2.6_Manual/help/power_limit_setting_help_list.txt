@@ -1,0 +1,2 @@
+[help]
+powerlimit tool = esp32_datasheet_cn_5.pdf

@@ -1,7 +1,7 @@
 /*
  * @Author: Mcfly
  * @Date: 2021-03-26 19:11:07
- * @LastEditTime: 2021-04-02 21:02:11
+ * @LastEditTime: 2021-04-02 21:36:53
  * @LastEditors: Mcfly
  * @Description: 
  * @FilePath: \QScreen\main\main.cpp
@@ -75,7 +75,7 @@ void app_main(void)
 {
     vTaskDelay(pdMS_TO_TICKS(100));
     listSystemInfo();
-    spiScreen = new SPI12864(SPI3_HOST, GPIO_NUM_21, GPIO_NUM_22, GPIO_NUM_15);
+    spiScreen = new SPI12864(GPIO_NUM_21, GPIO_NUM_22, GPIO_NUM_15, GPIO_NUM_23, GPIO_NUM_18);
     TimerHandle_t xTimer = xTimerCreate(    "ScreenTimer",       // Just a text name, not used by the kernel.
                                 10 / portTICK_PERIOD_MS,   // The timer period in ticks.
                                 pdTRUE,        // The timers will auto-reload themselves when they expire.

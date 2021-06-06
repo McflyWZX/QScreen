@@ -1,0 +1,8 @@
+Removed Pin From Net: NetName=TF_D2 Pin=RP1-1
+Removed Pin From Net: NetName=TF_D3 Pin=RP1-2
+Removed Pin From Net: NetName=TF_CMD Pin=RP1-3
+Removed Pin From Net: NetName=TF_CLK Pin=RP1-4
+Added Pin To Net: NetName=TF_CLK Pin=RP1-1
+Added Pin To Net: NetName=TF_CMD Pin=RP1-2
+Added Pin To Net: NetName=TF_D3 Pin=RP1-3
+Added Pin To Net: NetName=TF_D2 Pin=RP1-4
