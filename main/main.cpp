@@ -23,13 +23,19 @@
  *  └─────────────────────────────────────────────────────────────┘
  */
 
+#include <dirent.h>
+#include <unistd.h>
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <string.h>
+#include <string>
 #include <stdio.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "esp_system.h"
 #include "esp_spi_flash.h"
 #include "driver/gpio.h"
-//#include "SPI12864.hpp"
 #include "SSD1351.hpp"
 #include "sdkconfig.h"
 #include "freertos/timers.h"
@@ -37,14 +43,23 @@
 #include "driver/adc.h"
 #include "esp_adc_cal.h"
 #include "stdlib.h"
+#include "sdmmc_cmd.h"
+#include "sdkconfig.h"
+#include "esp_err.h"
+#include "esp_log.h"
+#include "esp_vfs_fat.h"
+#include "driver/sdmmc_host.h"
 
 /* Can use project configuration menu (idf.py menuconfig) to choose the GPIO to blink,
    or you can edit the following line and set a number here.
 */
 #define __cplusplus
 
+using std::string;
+using std::vector;
+
 #define DEFAULT_VREF 3300 //Use adc2_vref_to_gpio() to obtain a better estimate
-#define NO_OF_SAMPLES 64   //Multisampling
+#define NO_OF_SAMPLES 64  //Multisampling
 
 static esp_adc_cal_characteristics_t *adc_chars;
 
@@ -87,6 +102,83 @@ void screenTimer(TimerHandle_t pxTimer)
     t += 0.1;
 }
 
+bool hasCard = 0;
+bool SDbusy = 0;
+void sdCardDet(void *null)
+{
+    string mountPoint = "/sdcard";
+    esp_vfs_fat_sdmmc_mount_config_t mount_config;
+    sdmmc_slot_config_t slot_config;
+    //esp_err_t ret;
+    // Options for mounting the filesystem.
+    // If format_if_mount_failed is set to true, SD card will be partitioned and
+    // formatted in case when mounting fails.
+    mount_config = {
+        .format_if_mount_failed = false, //格式化内存卡如果文件系统挂载失败
+        .max_files = 8,
+        .allocation_unit_size = 16 * 1024};
+    sdmmc_card_t *card;
+    ESP_LOGI("SD", "Initializing SD card");
+
+    // Use settings defined above to initialize SD card and mount FAT filesystem.
+    // Note: esp_vfs_fat_sdmmc/sdspi_mount is all-in-one convenience functions.
+    // Please check its source code and implement error recovery when developing
+    // production applications.
+    ESP_LOGI("SD", "Using SDMMC peripheral");
+    sdmmc_host_t host = SDMMC_HOST_DEFAULT();
+
+    // This initializes the slot without card detect (CD) and write protect (WP) signals.
+    // Modify slot_config.gpio_cd and slot_config.gpio_wp if your board has these signals.
+    slot_config = SDMMC_SLOT_CONFIG_DEFAULT();
+    slot_config.gpio_cd = (gpio_num_t)22;
+
+    // To use 1-line SD mode, uncomment the following line:
+    // slot_config.width = 1;
+
+    // GPIOs 15, 2, 4, 12, 13 should have external 10k pull-ups.
+    // Internal pull-ups are not sufficient. However, enabling internal pull-ups
+    // does make a difference some boards, so we do that here.
+    gpio_set_pull_mode((gpio_num_t)15, GPIO_PULLUP_ONLY); // CMD, needed in 4- and 1- line modes
+    gpio_set_pull_mode((gpio_num_t)2, GPIO_PULLUP_ONLY);  // D0, needed in 4- and 1-line modes
+    gpio_set_pull_mode((gpio_num_t)4, GPIO_PULLUP_ONLY);  // D1, needed in 4-line mode only
+    gpio_set_pull_mode((gpio_num_t)12, GPIO_PULLUP_ONLY); // D2, needed in 4-line mode only
+    gpio_set_pull_mode((gpio_num_t)13, GPIO_PULLUP_ONLY); // D3, needed in 4- and 1-line modes
+
+    esp_err_t ret = ESP_OK;
+    gpio_pad_select_gpio((gpio_num_t)17);
+    gpio_set_direction((gpio_num_t)17, GPIO_MODE_OUTPUT);
+
+    ret = esp_vfs_fat_sdmmc_mount(mountPoint.c_str(), &host, &slot_config, &mount_config, &card);
+    while (1)
+    {
+        if (ret != ESP_OK)
+        {
+            if (ret == ESP_FAIL)
+            {
+                ESP_LOGE("SD_FS", "Failed to mount filesystem. ");
+            }
+            else
+            {
+                ret = esp_vfs_fat_sdmmc_mount(mountPoint.c_str(), &host, &slot_config, &mount_config, &card);
+                ESP_LOGE("SD_FS", "Failed :%s. ",
+                         esp_err_to_name(ret));
+            }
+            hasCard = 0;
+            gpio_set_level((gpio_num_t)17, 1);
+        } else {
+            hasCard = 1;
+            gpio_set_level((gpio_num_t)17, 0);
+            if(!SDbusy)
+            {
+                esp_vfs_fat_sdmmc_unmount();
+                ret = esp_vfs_fat_sdmmc_mount(mountPoint.c_str(), &host, &slot_config, &mount_config, &card);
+            }
+        }
+        vTaskDelay(400 / portTICK_PERIOD_MS);
+    }
+    //return;
+}
+
 extern "C"
 {
 
@@ -94,23 +186,15 @@ extern "C"
     {
         vTaskDelay(pdMS_TO_TICKS(100));
         listSystemInfo();
-        /*spiScreen = new SPI12864(GPIO_NUM_21, GPIO_NUM_22, GPIO_NUM_15, GPIO_NUM_23, GPIO_NUM_18);
-    TimerHandle_t xTimer = xTimerCreate(    "ScreenTimer",       // Just a text name, not used by the kernel.
-                                10 / portTICK_PERIOD_MS,   // The timer period in ticks.
-                                pdTRUE,        // The timers will auto-reload themselves when they expire.
-                                NULL,  // Assign each timer a unique id equal to its array index.
-                                screenTimer // Each timer calls the same callback when it expires.
-                            );
-    // The scheduler has not started yet so a block time is not used.
-    xTimerStart( xTimer, 0 );
-    while(1) {
-        printf("主任务，运行在核心：%d 上。\n", xPortGetCoreID());
-        vTaskDelay(10 / portTICK_PERIOD_MS);
-    }*/
+        //ADC初始化
         adc1_config_width(width);
         adc1_config_channel_atten((adc1_channel_t)channel, atten);
-        adc_chars = (esp_adc_cal_characteristics_t*)calloc(1, sizeof(esp_adc_cal_characteristics_t));
+        adc_chars = (esp_adc_cal_characteristics_t *)calloc(1, sizeof(esp_adc_cal_characteristics_t));
         esp_adc_cal_characterize(unit, atten, width, DEFAULT_VREF, adc_chars);
+
+        //SD卡初始化
+        //initSD();
+        xTaskCreate(&sdCardDet, "sdCardDetTask", 4096, (void *)1, 2, NULL);
 
         SSD1351 spiScreen;
         unsigned short i, m;
@@ -147,14 +231,8 @@ extern "C"
             }
             vTaskDelay(1000 / portTICK_PERIOD_MS);
             spiScreen.clear(BLACK);
-            /*TimerHandle_t xTimer = xTimerCreate("ScreenTimer",            // Just a text name, not used by the kernel.
-                                                100 / portTICK_PERIOD_MS, // The timer period in ticks.
-                                                pdTRUE,                   // The timers will auto-reload themselves when they expire.
-                                                NULL,                     // Assign each timer a unique id equal to its array index.
-                                                screenTimer               // Each timer calls the same callback when it expires.
-            );*/
-            // The scheduler has not started yet so a block time is not used.
-            //xTimerStart(xTimer, 0);
+            gpio_set_direction((gpio_num_t)0, GPIO_MODE_INPUT);
+            gpio_pullup_en((gpio_num_t)0);
             while (1)
             {
                 uint32_t adc_reading = 0;
@@ -162,16 +240,13 @@ extern "C"
                 for (int i = 0; i < NO_OF_SAMPLES; i++)
                 {
                     adc_reading += adc1_get_raw((adc1_channel_t)channel);
-                    vTaskDelay(100 / portTICK_PERIOD_MS);
+                    vTaskDelay(10 / portTICK_PERIOD_MS);
                 }
                 adc_reading /= NO_OF_SAMPLES;
-                //Convert adc_reading to voltage in mV
                 uint32_t voltage = esp_adc_cal_raw_to_voltage(adc_reading, adc_chars);
-                sprintf(strBuf, "Voltage: %.3fV", voltage * 4 / 1000.0f);
-                spiScreen.showString(0, 20, strBuf, MAGENTA);
-                //printf("Raw: %d\tVoltage: %dmV\n", adc_reading, voltage);
-                //vTaskDelay(pdMS_TO_TICKS(1000));
-                vTaskDelay(4000 / portTICK_PERIOD_MS);
+                sprintf(strBuf, "%.3f %s", voltage * 4 / 1000.0f, hasCard ? "Carded" : "NoCard");
+                spiScreen.showString(0, 0, strBuf, MAGENTA);
+                //spiScreen.showString(0, 0, strBuf, MAGENTA);
             }
         }
     }
