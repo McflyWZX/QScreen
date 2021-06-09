@@ -1,1 +1,0 @@
-['cmdstop', 'esp_tx 1 0x17', 'txpwr_track_en 0 0 0', 'txpwr_track_en 0 1 0', 'txpwr_track_en 1 1 0']

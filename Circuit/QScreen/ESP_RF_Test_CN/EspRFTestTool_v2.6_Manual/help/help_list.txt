@@ -1,8 +1,0 @@
-[help]
-rf tool = RFTestTool使用说明.pdf
-download tool = DownloadTool使用说明.pdf
-powerlimit tool = ESP32-Series_Power_Limit_Tool使用说明.pdf
-rf test = ESP射频测试指南.pdf
-fcc cer = FCC认证说明.pdf
-ce cer = CE认证说明.pdf
-srrc cer = SRRC认证说明.pdf
