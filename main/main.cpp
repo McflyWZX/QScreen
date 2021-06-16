@@ -94,58 +94,23 @@ extern "C"
     {
         vTaskDelay(pdMS_TO_TICKS(100));
         listSystemInfo();
-        //ADC初始化
 
         //SD卡初始化
-        SdCardBsp *bspCard = new SdCardBsp();
-        bspCard->startDetCard();
+        SdCardBsp bspCard;
+        bspCard.startDetCard();
 
-        BatSupport *myBat = new BatSupport();
+        //电池信息管理
+        BatSupport myBat;
 
         SSD1351 spiScreen;
-        unsigned short i, m;
-        spiScreen.clear(WHITE);
-        spiScreen.setColor(BLACK, WHITE);
+        spiScreen.showDemo();
+
         while (1)
         {
-            spiScreen.clear(CYAN);
-            spiScreen.showChinese(16, 0, 0, 32, RED); //中
-            spiScreen.showChinese(48, 0, 1, 32, RED); //景
-            spiScreen.showChinese(80, 0, 2, 32, RED); //园
-
-            spiScreen.showChinese(8, 40, 0, 16, RED);   //中
-            spiScreen.showChinese(24, 40, 1, 16, RED);  //景
-            spiScreen.showChinese(40, 40, 2, 16, RED);  //园
-            spiScreen.showChinese(56, 40, 3, 16, RED);  //电
-            spiScreen.showChinese(72, 40, 4, 16, RED);  //子
-            spiScreen.showChinese(88, 40, 5, 16, RED);  //科
-            spiScreen.showChinese(104, 40, 6, 16, RED); //技
-
-            spiScreen.showString(32, 60, "1.5 OLED", RED);
-            spiScreen.showString(22, 80, "OLED_W:", RED);
-            spiScreen.showNum(82, 80, 128, 6, RED);
-            spiScreen.showString(22, 100, "OLED_H:", RED);
-            spiScreen.showNum(82, 100, 128, 6, RED);
-            vTaskDelay(1000 / portTICK_PERIOD_MS);
-            spiScreen.clear(CYAN);
-            for (m = 0; m < 3; m++)
-            {
-                for (i = 0; i < 3; i++)
-                {
-                    spiScreen.showPicture(4 + m * 40, 4 + i * 40, 4 + 39 + m * 40, 4 + 39 + i * 40);
-                }
-            }
-            vTaskDelay(1000 / portTICK_PERIOD_MS);
-            spiScreen.clear(BLACK);
-            gpio_set_direction((gpio_num_t)0, GPIO_MODE_INPUT);
-            gpio_pullup_en((gpio_num_t)0);
-            while (1)
-            {
-                
-                sprintf(strBuf, "%.3f %s", myBat->getBatVoltage() * 4 / 1000.0f, bspCard->isHasCard() ? "Carded" : "NoCard");
+ 
+                sprintf(strBuf, "%.3f %s", myBat.getBatVoltage() * 4 / 1000.0f, bspCard.isHasCard() ? "Carded" : "NoCard");
                 spiScreen.showString(0, 0, strBuf, MAGENTA);
-                //spiScreen.showString(0, 0, strBuf, MAGENTA);
-            }
+            
         }
     }
 }

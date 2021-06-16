@@ -72,6 +72,7 @@ private:
     void init(void); 
 public:
     SSD1351();
+    void showDemo();
     void setColor(unsigned short backColor, unsigned short pointColor);
     void clear(unsigned short Color);
     void showChinese(unsigned short x,unsigned short y,unsigned char index,unsigned char size,unsigned short color);
