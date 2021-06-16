@@ -1,6 +1,7 @@
 #ifndef __SSD1351_H
 #define __SSD1351_H 
 
+
 #include "stdlib.h"	
 #include "driver/gpio.h"
 #include "freertos/FreeRTOS.h"

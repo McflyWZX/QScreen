@@ -23,6 +23,7 @@
  *  └─────────────────────────────────────────────────────────────┘
  */
 
+#include "sdkconfig.h"
 #include <dirent.h>
 #include <unistd.h>
 #include <iostream>
@@ -37,18 +38,14 @@
 #include "esp_spi_flash.h"
 #include "driver/gpio.h"
 #include "SSD1351.hpp"
-#include "sdkconfig.h"
 #include "freertos/timers.h"
 #include "driver/spi_master.h"
 #include "driver/adc.h"
 #include "esp_adc_cal.h"
 #include "stdlib.h"
-#include "sdmmc_cmd.h"
-#include "sdkconfig.h"
 #include "esp_err.h"
 #include "esp_log.h"
-#include "esp_vfs_fat.h"
-#include "driver/sdmmc_host.h"
+#include "sdCard.hpp"
 
 /* Can use project configuration menu (idf.py menuconfig) to choose the GPIO to blink,
    or you can edit the following line and set a number here.
@@ -102,83 +99,6 @@ void screenTimer(TimerHandle_t pxTimer)
     t += 0.1;
 }
 
-bool hasCard = 0;
-bool SDbusy = 0;
-void sdCardDet(void *null)
-{
-    string mountPoint = "/sdcard";
-    esp_vfs_fat_sdmmc_mount_config_t mount_config;
-    sdmmc_slot_config_t slot_config;
-    //esp_err_t ret;
-    // Options for mounting the filesystem.
-    // If format_if_mount_failed is set to true, SD card will be partitioned and
-    // formatted in case when mounting fails.
-    mount_config = {
-        .format_if_mount_failed = false, //格式化内存卡如果文件系统挂载失败
-        .max_files = 8,
-        .allocation_unit_size = 16 * 1024};
-    sdmmc_card_t *card;
-    ESP_LOGI("SD", "Initializing SD card");
-
-    // Use settings defined above to initialize SD card and mount FAT filesystem.
-    // Note: esp_vfs_fat_sdmmc/sdspi_mount is all-in-one convenience functions.
-    // Please check its source code and implement error recovery when developing
-    // production applications.
-    ESP_LOGI("SD", "Using SDMMC peripheral");
-    sdmmc_host_t host = SDMMC_HOST_DEFAULT();
-
-    // This initializes the slot without card detect (CD) and write protect (WP) signals.
-    // Modify slot_config.gpio_cd and slot_config.gpio_wp if your board has these signals.
-    slot_config = SDMMC_SLOT_CONFIG_DEFAULT();
-    slot_config.gpio_cd = (gpio_num_t)22;
-
-    // To use 1-line SD mode, uncomment the following line:
-    // slot_config.width = 1;
-
-    // GPIOs 15, 2, 4, 12, 13 should have external 10k pull-ups.
-    // Internal pull-ups are not sufficient. However, enabling internal pull-ups
-    // does make a difference some boards, so we do that here.
-    gpio_set_pull_mode((gpio_num_t)15, GPIO_PULLUP_ONLY); // CMD, needed in 4- and 1- line modes
-    gpio_set_pull_mode((gpio_num_t)2, GPIO_PULLUP_ONLY);  // D0, needed in 4- and 1-line modes
-    gpio_set_pull_mode((gpio_num_t)4, GPIO_PULLUP_ONLY);  // D1, needed in 4-line mode only
-    gpio_set_pull_mode((gpio_num_t)12, GPIO_PULLUP_ONLY); // D2, needed in 4-line mode only
-    gpio_set_pull_mode((gpio_num_t)13, GPIO_PULLUP_ONLY); // D3, needed in 4- and 1-line modes
-
-    esp_err_t ret = ESP_OK;
-    gpio_pad_select_gpio((gpio_num_t)17);
-    gpio_set_direction((gpio_num_t)17, GPIO_MODE_OUTPUT);
-
-    ret = esp_vfs_fat_sdmmc_mount(mountPoint.c_str(), &host, &slot_config, &mount_config, &card);
-    while (1)
-    {
-        if (ret != ESP_OK)
-        {
-            if (ret == ESP_FAIL)
-            {
-                ESP_LOGE("SD_FS", "Failed to mount filesystem. ");
-            }
-            else
-            {
-                ret = esp_vfs_fat_sdmmc_mount(mountPoint.c_str(), &host, &slot_config, &mount_config, &card);
-                ESP_LOGE("SD_FS", "Failed :%s. ",
-                         esp_err_to_name(ret));
-            }
-            hasCard = 0;
-            gpio_set_level((gpio_num_t)17, 1);
-        } else {
-            hasCard = 1;
-            gpio_set_level((gpio_num_t)17, 0);
-            if(!SDbusy)
-            {
-                esp_vfs_fat_sdmmc_unmount();
-                ret = esp_vfs_fat_sdmmc_mount(mountPoint.c_str(), &host, &slot_config, &mount_config, &card);
-            }
-        }
-        vTaskDelay(400 / portTICK_PERIOD_MS);
-    }
-    //return;
-}
-
 extern "C"
 {
 
@@ -193,8 +113,8 @@ extern "C"
         esp_adc_cal_characterize(unit, atten, width, DEFAULT_VREF, adc_chars);
 
         //SD卡初始化
-        //initSD();
-        xTaskCreate(&sdCardDet, "sdCardDetTask", 4096, (void *)1, 2, NULL);
+        SdCardBsp *bspCard = new SdCardBsp();
+        bspCard->startDetCard();
 
         SSD1351 spiScreen;
         unsigned short i, m;
@@ -244,7 +164,7 @@ extern "C"
                 }
                 adc_reading /= NO_OF_SAMPLES;
                 uint32_t voltage = esp_adc_cal_raw_to_voltage(adc_reading, adc_chars);
-                sprintf(strBuf, "%.3f %s", voltage * 4 / 1000.0f, hasCard ? "Carded" : "NoCard");
+                sprintf(strBuf, "%.3f %s", voltage * 4 / 1000.0f, bspCard->isHasCard() ? "Carded" : "NoCard");
                 spiScreen.showString(0, 0, strBuf, MAGENTA);
                 //spiScreen.showString(0, 0, strBuf, MAGENTA);
             }
