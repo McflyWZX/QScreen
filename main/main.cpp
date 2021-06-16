@@ -40,12 +40,11 @@
 #include "SSD1351.hpp"
 #include "freertos/timers.h"
 #include "driver/spi_master.h"
-#include "driver/adc.h"
-#include "esp_adc_cal.h"
 #include "stdlib.h"
 #include "esp_err.h"
 #include "esp_log.h"
 #include "sdCard.hpp"
+#include "BatSupport.hpp"
 
 /* Can use project configuration menu (idf.py menuconfig) to choose the GPIO to blink,
    or you can edit the following line and set a number here.
@@ -54,17 +53,6 @@
 
 using std::string;
 using std::vector;
-
-#define DEFAULT_VREF 3300 //Use adc2_vref_to_gpio() to obtain a better estimate
-#define NO_OF_SAMPLES 64  //Multisampling
-
-static esp_adc_cal_characteristics_t *adc_chars;
-
-static const adc_channel_t channel = ADC_CHANNEL_0; //GPIO34 if ADC1, GPIO14 if ADC2
-static const adc_bits_width_t width = ADC_WIDTH_BIT_12;
-
-static const adc_atten_t atten = ADC_ATTEN_DB_0;
-static const adc_unit_t unit = ADC_UNIT_1;
 
 char strBuf[100];
 
@@ -107,14 +95,12 @@ extern "C"
         vTaskDelay(pdMS_TO_TICKS(100));
         listSystemInfo();
         //ADC初始化
-        adc1_config_width(width);
-        adc1_config_channel_atten((adc1_channel_t)channel, atten);
-        adc_chars = (esp_adc_cal_characteristics_t *)calloc(1, sizeof(esp_adc_cal_characteristics_t));
-        esp_adc_cal_characterize(unit, atten, width, DEFAULT_VREF, adc_chars);
 
         //SD卡初始化
         SdCardBsp *bspCard = new SdCardBsp();
         bspCard->startDetCard();
+
+        BatSupport *myBat = new BatSupport();
 
         SSD1351 spiScreen;
         unsigned short i, m;
@@ -155,16 +141,8 @@ extern "C"
             gpio_pullup_en((gpio_num_t)0);
             while (1)
             {
-                uint32_t adc_reading = 0;
-                //Multisampling
-                for (int i = 0; i < NO_OF_SAMPLES; i++)
-                {
-                    adc_reading += adc1_get_raw((adc1_channel_t)channel);
-                    vTaskDelay(10 / portTICK_PERIOD_MS);
-                }
-                adc_reading /= NO_OF_SAMPLES;
-                uint32_t voltage = esp_adc_cal_raw_to_voltage(adc_reading, adc_chars);
-                sprintf(strBuf, "%.3f %s", voltage * 4 / 1000.0f, bspCard->isHasCard() ? "Carded" : "NoCard");
+                
+                sprintf(strBuf, "%.3f %s", myBat->getBatVoltage() * 4 / 1000.0f, bspCard->isHasCard() ? "Carded" : "NoCard");
                 spiScreen.showString(0, 0, strBuf, MAGENTA);
                 //spiScreen.showString(0, 0, strBuf, MAGENTA);
             }
