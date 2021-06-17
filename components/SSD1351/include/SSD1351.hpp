@@ -18,6 +18,13 @@ private:
     gpio_num_t PIN_NUM_MOSI     = ((gpio_num_t)23);
     gpio_num_t PIN_NUM_CLK      = ((gpio_num_t)19);
 
+    
+    spi_device_handle_t spi;
+
+    spi_transaction_t spi_trans;
+
+    bool useHard = 0;
+
     //#define LED_ON GPIO_ResetBits(GPIOB,GPIO_Pin_8)
     //#define LED_OFF GPIO_SetBits(GPIOB,GPIO_Pin_8)
 
@@ -66,6 +73,7 @@ private:
     unsigned int mypow(unsigned char m,unsigned char n);
     void LCD_Writ_Bus(unsigned char dat);
     void LCD_WR_DATA8(unsigned short dat);
+    void LCD_WR_DATA8FAST(unsigned short dat);
     void LCD_WR_DATA16(unsigned short dat);
     void LCD_WR_REG(unsigned char dat);
     void LCD_Address_Set(unsigned char x1,unsigned char y1,unsigned char x2,unsigned char y2);
@@ -85,6 +93,7 @@ public:
     void showChar(unsigned short x,unsigned short y,unsigned char num,unsigned short color);
     void showString(unsigned short x,unsigned short y,const char *p,unsigned short color);
     void showNum(unsigned short x,unsigned short y,float num,unsigned char len,unsigned short color);
+    void fillBuf(unsigned short xsta, unsigned short ysta, unsigned short width, unsigned short height, unsigned char *buf);
     void showPicture(unsigned short x1,unsigned short y1,unsigned short x2,unsigned short y2);
 
     //ÑÕÉ«

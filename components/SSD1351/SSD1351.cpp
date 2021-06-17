@@ -42,6 +42,16 @@ void SSD1351::LCD_WR_DATA8(unsigned short dat)
 }
 
 /******************************************************************************
+      函数说明：LCD写入数据快速，但没有DC选择，要手动DC
+      入口数据：dat 写入的数据
+      返回值：  无
+******************************************************************************/
+void SSD1351::LCD_WR_DATA8FAST(unsigned short dat)
+{
+	LCD_Writ_Bus(dat);
+}
+
+/******************************************************************************
       函数说明：LCD写入数据
       入口数据：dat 写入的数据
       返回值：  无
@@ -80,12 +90,6 @@ void SSD1351::LCD_Address_Set(unsigned char x1, unsigned char y1, unsigned char 
 	LCD_WR_DATA8(y2);
 }
 
-SSD1351::SSD1351()
-{
-	init();
-	//printf("%d %d %d %d %d", screenPin.PIN_NUM_DC, screenPin.PIN_NUM_RST, screenPin.PIN_NUM_CS, screenPin.PIN_NUM_CLK, screenPin.PIN_NUM_MOSI);
-}
-
 void SSD1351::showDemo()
 {
 	unsigned short i, m;
@@ -94,12 +98,12 @@ void SSD1351::showDemo()
 	showChinese(48, 0, 1, 32, RED); //景
 	showChinese(80, 0, 2, 32, RED); //园
 
-	showChinese(8, 40, 0, 16, RED);	//中
-	showChinese(24, 40, 1, 16, RED);	//景
-	showChinese(40, 40, 2, 16, RED);	//园
-	showChinese(56, 40, 3, 16, RED);	//电
-	showChinese(72, 40, 4, 16, RED);	//子
-	showChinese(88, 40, 5, 16, RED);	//科
+	showChinese(8, 40, 0, 16, RED);	  //中
+	showChinese(24, 40, 1, 16, RED);  //景
+	showChinese(40, 40, 2, 16, RED);  //园
+	showChinese(56, 40, 3, 16, RED);  //电
+	showChinese(72, 40, 4, 16, RED);  //子
+	showChinese(88, 40, 5, 16, RED);  //科
 	showChinese(104, 40, 6, 16, RED); //技
 
 	showString(32, 60, "1.5 OLED", RED);
@@ -120,21 +124,62 @@ void SSD1351::showDemo()
 	clear(BLACK);
 }
 
+SPI12864::SPI12864(spi_host_device_t hspi)
+{
+	useHard = 1;
+
+	esp_err_t ret;
+	spi_bus_config_t buscfg;
+	memset(&buscfg, 0, sizeof(spi_bus_config_t));
+	buscfg.miso_io_num = -1;
+	buscfg.mosi_io_num = PIN_NUM_MOSI;
+	buscfg.sclk_io_num = PIN_NUM_CLK;
+	buscfg.quadwp_io_num = -1;
+	buscfg.quadhd_io_num = -1;
+	buscfg.max_transfer_sz = 128 * 128 * 2;
+	//buscfg.flags=SPICOMMON_BUSFLAG_MASTER;
+	//buscfg.intr_flags=0;
+
+	spi_device_interface_config_t devcfg;
+	memset(&devcfg, 0, sizeof(spi_device_interface_config_t));
+	devcfg.clock_speed_hz = 80 * 1000 * 1000;
+	devcfg.mode = 0;
+	devcfg.spics_io_num = -1;
+	devcfg.queue_size = 256;
+	//devcfg.flags=SPI_DEVICE_HALFDUPLEX;
+
+	//Initialize the SPI bus
+	ret = spi_bus_initialize(hspi, &buscfg, 0);
+	ESP_ERROR_CHECK(ret);
+	//Attach the LCD to the SPI bus
+	ret = spi_bus_add_device(hspi, &devcfg, &spi);
+
+	memset(&spi_trans, 0, sizeof(spi_trans)); //Zero out the transaction
+	spi_trans.length = 8;					  //Len is in bytes, transaction length is in bits.
+
+	init();
+}
+
+SSD1351::SSD1351()
+{
+	gpio_pad_select_gpio(PIN_NUM_CLK);
+	gpio_pad_select_gpio(PIN_NUM_MOSI);
+
+	gpio_set_direction(PIN_NUM_CLK, GPIO_MODE_OUTPUT);
+	gpio_set_direction(PIN_NUM_MOSI, GPIO_MODE_OUTPUT);
+
+	init();
+}
+
 //OLED的初始化
 void SSD1351::init(void)
 {
 
-	gpio_pad_select_gpio(PIN_NUM_CLK);
-	gpio_pad_select_gpio(PIN_NUM_MOSI);
 	gpio_pad_select_gpio(PIN_NUM_DC);
 	gpio_pad_select_gpio(PIN_NUM_RST);
-	//gpio_pad_select_gpio(PIN_NUM_CS);
 
-	gpio_set_direction(PIN_NUM_CLK, GPIO_MODE_OUTPUT);
-	gpio_set_direction(PIN_NUM_MOSI, GPIO_MODE_OUTPUT);
 	gpio_set_direction(PIN_NUM_DC, GPIO_MODE_OUTPUT);
 	gpio_set_direction(PIN_NUM_RST, GPIO_MODE_OUTPUT);
-	//gpio_set_direction(PIN_NUM_CS, GPIO_MODE_OUTPUT);
 
 	OLED_RES_Clr();
 	vTaskDelay(200 / portTICK_PERIOD_MS);
@@ -487,6 +532,28 @@ void SSD1351::showNum(unsigned short x, unsigned short y, float num, unsigned ch
 }
 
 /******************************************************************************
+      函数说明：在指定区域填充缓冲区内容
+      入口数据：xsta,ysta   起始坐标
+                width,height   图像宽高
+      返回值：  无
+******************************************************************************/
+void SSD1351::fillBuf(unsigned short xsta, unsigned short ysta, unsigned short width, unsigned short height, unsigned char *buf)
+{
+	unsigned short x, y, i;
+	LCD_Address_Set(xsta, ysta, xsta + width, ysta + height); //设置光标位置
+	LCD_WR_REG(0x5c);
+	OLED_DC_Set();
+	for (y = ysta, i = 0; y <= ysta + height; y++)
+	{
+		for (x = xsta; x <= xsta + width; x++, i++)
+		{
+			LCD_WR_DATA8FAST(buf[i * 2 + 1]);
+			LCD_WR_DATA8FAST(buf[i * 2]);
+		}
+	}
+}
+
+/******************************************************************************
       函数说明：显示40x40图片
       入口数据：x,y    起点坐标
       返回值：  无
@@ -496,9 +563,10 @@ void SSD1351::showPicture(unsigned short x1, unsigned short y1, unsigned short x
 	int i, j;
 	LCD_Address_Set(x1, y1, x2, y2);
 	LCD_WR_REG(0x5c);
+	OLED_DC_Set();
 	for (i = 0; i < 1600; i++)
 	{
-		LCD_WR_DATA8(image[i * 2 + 1]);
-		LCD_WR_DATA8(image[i * 2]);
+		LCD_WR_DATA8FAST(image[i * 2 + 1]);
+		LCD_WR_DATA8FAST(image[i * 2]);
 	}
 }

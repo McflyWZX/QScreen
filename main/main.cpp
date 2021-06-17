@@ -45,6 +45,10 @@
 #include "esp_log.h"
 #include "sdCard.hpp"
 #include "BatSupport.hpp"
+#include <algorithm>
+#include <inttypes.h>
+#include <math.h>
+#include <memory.h>
 
 /* Can use project configuration menu (idf.py menuconfig) to choose the GPIO to blink,
    or you can edit the following line and set a number here.
@@ -79,17 +83,9 @@ void listSystemInfo(void)
     printf("Free heap: %d\n", esp_get_free_heap_size());
 }
 
-float t = 0;
-void screenTimer(TimerHandle_t pxTimer)
-{
-    //spiScreen->screenUpdate();
-    //spiScreen.showNum(10, 10, t, 5, MAGENTA);
-    t += 0.1;
-}
-
 extern "C"
 {
-
+    unsigned char screenBuf[128 * 128 * 2];
     void app_main(void)
     {
         vTaskDelay(pdMS_TO_TICKS(100));
@@ -105,12 +101,31 @@ extern "C"
         SSD1351 spiScreen;
         spiScreen.showDemo();
 
+        float omega = 0, biasX, biasY, ibiasX, ibiasY;
+        short r = 15, R = 32;
+        unsigned short color = CYAN;
         while (1)
         {
- 
-                sprintf(strBuf, "%.3f %s", myBat.getBatVoltage() * 4 / 1000.0f, bspCard.isHasCard() ? "Carded" : "NoCard");
-                spiScreen.showString(0, 0, strBuf, MAGENTA);
-            
+            //sprintf(strBuf, "%.3f %s", myBat.getBatVoltage() * 4 / 1000.0f, bspCard.isHasCard() ? "Carded" : "NoCard");
+            //spiScreen.showString(0, 0, strBuf, MAGENTA);
+            memset(screenBuf, 0x00, 128 * 128 * 2);
+            biasX = 64 + R * cosf(omega);
+            biasY = 64 + R * sinf(omega);
+            for(short j = biasY + r; j >= biasY - r; j--)
+            {
+                for(short i = biasX - r; i <= biasX + r; i++)
+                {
+                    if((j - biasY) * (j - biasY) + (i - biasX) * (i - biasX) > r * r)
+                        continue;
+                    else {
+                        *((unsigned short*)(screenBuf + j * 256 + i * 2)) = color;
+                        //*((unsigned short*)(screenBuf + (j-2*R) * 256 + (i-2*R) * 2)) = ~color;
+                    }
+                }
+            }
+            omega += 3.1415926535 / 48;
+            spiScreen.fillBuf(0, 0, 127, 127, screenBuf);
+            //vTaskDelay(pdMS_TO_TICKS(100));
         }
     }
 }
