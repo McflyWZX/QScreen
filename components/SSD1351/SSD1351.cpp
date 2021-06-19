@@ -124,42 +124,6 @@ void SSD1351::showDemo()
 	clear(BLACK);
 }
 
-SPI12864::SPI12864(spi_host_device_t hspi)
-{
-	useHard = 1;
-
-	esp_err_t ret;
-	spi_bus_config_t buscfg;
-	memset(&buscfg, 0, sizeof(spi_bus_config_t));
-	buscfg.miso_io_num = -1;
-	buscfg.mosi_io_num = PIN_NUM_MOSI;
-	buscfg.sclk_io_num = PIN_NUM_CLK;
-	buscfg.quadwp_io_num = -1;
-	buscfg.quadhd_io_num = -1;
-	buscfg.max_transfer_sz = 128 * 128 * 2;
-	//buscfg.flags=SPICOMMON_BUSFLAG_MASTER;
-	//buscfg.intr_flags=0;
-
-	spi_device_interface_config_t devcfg;
-	memset(&devcfg, 0, sizeof(spi_device_interface_config_t));
-	devcfg.clock_speed_hz = 80 * 1000 * 1000;
-	devcfg.mode = 0;
-	devcfg.spics_io_num = -1;
-	devcfg.queue_size = 256;
-	//devcfg.flags=SPI_DEVICE_HALFDUPLEX;
-
-	//Initialize the SPI bus
-	ret = spi_bus_initialize(hspi, &buscfg, 0);
-	ESP_ERROR_CHECK(ret);
-	//Attach the LCD to the SPI bus
-	ret = spi_bus_add_device(hspi, &devcfg, &spi);
-
-	memset(&spi_trans, 0, sizeof(spi_trans)); //Zero out the transaction
-	spi_trans.length = 8;					  //Len is in bytes, transaction length is in bits.
-
-	init();
-}
-
 SSD1351::SSD1351()
 {
 	gpio_pad_select_gpio(PIN_NUM_CLK);
@@ -187,19 +151,25 @@ void SSD1351::init(void)
 
 	LCD_WR_REG(0xFD);
 	LCD_WR_DATA8(0x12);
+	//command lock
 	LCD_WR_REG(0xFD);
 	LCD_WR_DATA8(0xB1);
+
 	LCD_WR_REG(0xAE);
 	LCD_WR_REG(0xB3);
 	LCD_WR_DATA8(0xF1);
 	LCD_WR_REG(0xCA);
 	LCD_WR_DATA8(0x7F);
+	//Set display offset
 	LCD_WR_REG(0xA2);
 	LCD_WR_DATA8(0x00);
+
 	LCD_WR_REG(0xA1);
 	LCD_WR_DATA8(0x00);
+	//Set Re-Map & Color depth
 	LCD_WR_REG(0xA0);
 	LCD_WR_DATA8(0x74);
+	
 	LCD_WR_REG(0xB5);
 	LCD_WR_DATA8(0x00);
 	LCD_WR_REG(0xAB);
@@ -226,7 +196,9 @@ void SSD1351::init(void)
 	LCD_WR_DATA8(0x01);
 	LCD_WR_REG(0xBE);
 	LCD_WR_DATA8(0x05);
+	//Set display mode
 	LCD_WR_REG(0xA6);
+
 	LCD_WR_REG(0xAF);
 }
 
@@ -416,7 +388,6 @@ void SSD1351::drawRectangle(unsigned short x1, unsigned short y1, unsigned short
 void SSD1351::circle(unsigned short x0, unsigned short y0, unsigned char r, unsigned short color)
 {
 	int a, b;
-	int di;
 	a = 0;
 	b = r;
 	while (a <= b)
@@ -446,7 +417,6 @@ void SSD1351::circle(unsigned short x0, unsigned short y0, unsigned char r, unsi
 void SSD1351::showChar(unsigned short x, unsigned short y, unsigned char num, unsigned short color)
 {
 	unsigned char pos, t, temp;
-	unsigned short x1 = x;
 	LCD_WR_REG(0x5c);
 	if (x > LCD_W - 16 || y > LCD_H - 16)
 		return;									  //设置窗口
@@ -515,7 +485,6 @@ unsigned int SSD1351::mypow(unsigned char m, unsigned char n)
 void SSD1351::showNum(unsigned short x, unsigned short y, float num, unsigned char len, unsigned short color)
 {
 	unsigned char t, temp;
-	unsigned char enshow = 0;
 	unsigned short num1;
 	num1 = num * 100;
 	for (t = 0; t < len; t++)
@@ -560,7 +529,7 @@ void SSD1351::fillBuf(unsigned short xsta, unsigned short ysta, unsigned short w
 ******************************************************************************/
 void SSD1351::showPicture(unsigned short x1, unsigned short y1, unsigned short x2, unsigned short y2)
 {
-	int i, j;
+	int i;
 	LCD_Address_Set(x1, y1, x2, y2);
 	LCD_WR_REG(0x5c);
 	OLED_DC_Set();

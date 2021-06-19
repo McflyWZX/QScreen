@@ -18,13 +18,6 @@ private:
     gpio_num_t PIN_NUM_MOSI     = ((gpio_num_t)23);
     gpio_num_t PIN_NUM_CLK      = ((gpio_num_t)19);
 
-    
-    spi_device_handle_t spi;
-
-    spi_transaction_t spi_trans;
-
-    bool useHard = 0;
-
     //#define LED_ON GPIO_ResetBits(GPIOB,GPIO_Pin_8)
     //#define LED_OFF GPIO_SetBits(GPIOB,GPIO_Pin_8)
 

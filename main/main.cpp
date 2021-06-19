@@ -101,7 +101,7 @@ extern "C"
         SSD1351 spiScreen;
         spiScreen.showDemo();
 
-        float omega = 0, biasX, biasY, ibiasX, ibiasY;
+        float omega = 0, biasX, biasY;
         short r = 15, R = 32;
         unsigned short color = CYAN;
         while (1)
