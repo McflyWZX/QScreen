@@ -1,7 +1,7 @@
 /*
  * @Author: Mcfly
  * @Date: 2021-06-16 19:42:35
- * @LastEditTime: 2021-07-01 23:40:05
+ * @LastEditTime: 2021-07-01 23:49:34
  * @LastEditors: Mcfly
  * @Description: SD卡的板级支持及各种文件支持
  * @FilePath: \QScreen\components\sdCard\sdCard.cpp
@@ -15,7 +15,6 @@ using std::string;
 void SdCardBsp::sdCardDet()
 {
     esp_err_t ret = ESP_OK;
-    ret = esp_vfs_fat_sdmmc_mount(mountPoint.c_str(), &sdHost, &slot_config, &mount_config, &card);
     while (1)
     {
         do{
@@ -38,10 +37,10 @@ void SdCardBsp::sdCardDet()
             hasCard = 0;
             gpio_set_level((gpio_num_t)17, 1);
         } else {
+            esp_vfs_fat_sdmmc_unmount();
             hasCard = 1;
             gpio_set_level((gpio_num_t)17, 0);
         }
-        esp_vfs_fat_sdmmc_unmount();
         SDbusy = 0;
     }
 }
