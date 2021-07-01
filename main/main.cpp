@@ -1,7 +1,7 @@
 /*
  * @Author: Mcfly
  * @Date: 2021-03-26 19:11:07
- * @LastEditTime: 2021-04-02 21:36:53
+ * @LastEditTime: 2021-07-01 23:33:21
  * @LastEditors: Mcfly
  * @Description: 
  * @FilePath: \QScreen\main\main.cpp
@@ -104,6 +104,8 @@ extern "C"
         float omega = 0, biasX, biasY;
         short r = 15, R = 32;
         unsigned short color = CYAN;
+        while((!bspCard.isHasCard()) || (!bspCard.cardFree()));
+        bspCard.loadBmp("/sdcard", "test.bmp");
         while (1)
         {
             //sprintf(strBuf, "%.3f %s", myBat.getBatVoltage() * 4 / 1000.0f, bspCard.isHasCard() ? "Carded" : "NoCard");
