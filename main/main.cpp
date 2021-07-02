@@ -1,7 +1,7 @@
 /*
  * @Author: Mcfly
  * @Date: 2021-03-26 19:11:07
- * @LastEditTime: 2021-07-01 23:33:21
+ * @LastEditTime: 2021-07-03 01:12:36
  * @LastEditors: Mcfly
  * @Description: 
  * @FilePath: \QScreen\main\main.cpp
@@ -44,6 +44,7 @@
 #include "esp_err.h"
 #include "esp_log.h"
 #include "sdCard.hpp"
+#include "XinCorePicture.hpp"
 #include "BatSupport.hpp"
 #include <algorithm>
 #include <inttypes.h>
@@ -99,18 +100,33 @@ extern "C"
         BatSupport myBat;
 
         SSD1351 spiScreen;
-        spiScreen.showDemo();
+        spiScreen.clear(BLACK);
+        //spiScreen.showDemo();
 
-        float omega = 0, biasX, biasY;
-        short r = 15, R = 32;
-        unsigned short color = CYAN;
-        while((!bspCard.isHasCard()) || (!bspCard.cardFree()));
-        bspCard.loadBmp("/sdcard", "test.bmp");
+        /*while((!bspCard.isHasCard()) || (!bspCard.cardFree()));
+        XinCorePicture::Bmp24Raw testBmpRaw = bspCard.loadBmp("/sdcard", "test.bmp");
+        XinCorePicture::Bmp16 testBmp = XinCorePicture::bmp24Raw2Bmp16(testBmpRaw);
+        spiScreen.fillBuf(0, 0, testBmp.width - 1, testBmp.height - 1, testBmp.bmpData); */     
+        while((!bspCard.isHasCard()) || (!bspCard.cardFree()))
+        {
+            vTaskDelay(pdMS_TO_TICKS(10));
+        }
+
+        XinCorePicture::Bmp24Raw* testBmpRaw1 = bspCard.loadBmp("/sdcard", "test.bmp");
+        XinCorePicture::Bmp24Raw* testBmpRaw2 = bspCard.loadBmp("/sdcard", "testb.bmp");
+        if(testBmpRaw1 == NULL)printf("bmp1 Err\r\n");
+        if(testBmpRaw2 == NULL)printf("bmp2 Err\r\n");
+        XinCorePicture::Bmp16* testBmp1 = XinCorePicture::bmp24Raw2Bmp16(*testBmpRaw1);
+        XinCorePicture::Bmp16* testBmp2 = XinCorePicture::bmp24Raw2Bmp16(*testBmpRaw2);
+
+        //gpio_pad_select_gpio((gpio_num_t)0);
+        //gpio_set_direction((gpio_num_t)0, GPIO_MODE_INPUT);
+        
         while (1)
         {
             //sprintf(strBuf, "%.3f %s", myBat.getBatVoltage() * 4 / 1000.0f, bspCard.isHasCard() ? "Carded" : "NoCard");
             //spiScreen.showString(0, 0, strBuf, MAGENTA);
-            memset(screenBuf, 0x00, 128 * 128 * 2);
+           /* memset(screenBuf, 0x00, 128 * 128 * 2);
             biasX = 64 + R * cosf(omega);
             biasY = 64 + R * sinf(omega);
             for(short j = biasY + r; j >= biasY - r; j--)
@@ -121,13 +137,18 @@ extern "C"
                         continue;
                     else {
                         *((unsigned short*)(screenBuf + j * 256 + i * 2)) = color;
-                        //*((unsigned short*)(screenBuf + (j-2*R) * 256 + (i-2*R) * 2)) = ~color;
                     }
                 }
             }
             omega += 3.1415926535 / 48;
-            spiScreen.fillBuf(0, 0, 127, 127, screenBuf);
+            spiScreen.fillBuf(0, 0, 127, 127, screenBuf);*/
             //vTaskDelay(pdMS_TO_TICKS(100));
+            if(gpio_get_level((gpio_num_t)0))
+            {            
+                spiScreen.fillBuf(0, 0, testBmp1->width - 1, testBmp1->height - 1, testBmp1->bmpData);
+            } else {              
+                spiScreen.fillBuf(0, 0, testBmp2->width - 1, testBmp2->height - 1, testBmp2->bmpData);
+            }
         }
     }
 }
