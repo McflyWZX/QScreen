@@ -1,7 +1,7 @@
 /*
  * @Author: Mcfly
  * @Date: 2021-06-16 19:42:35
- * @LastEditTime: 2021-07-01 23:31:33
+ * @LastEditTime: 2021-07-03 00:31:39
  * @LastEditors: Mcfly
  * @Description: 
  * @FilePath: \QScreen\components\sdCard\include\sdCard.hpp
@@ -17,6 +17,7 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "string"
+#include "XinCorePicture.hpp"
 
 using std::string;
 
@@ -69,8 +70,6 @@ private:
     sdmmc_card_t *card;
     sdmmc_host_t sdHost;
 
-    unsigned short RGB24TORGB16(unsigned int R, unsigned int G, unsigned int B) { return (unsigned short int)((((R) >> 3) << 11) | (((G) >> 2) << 5) | ((B) >> 3)); }
-
     FILE *openFile(string fileSrc, string fileName, string opType);
     void closeFile(FILE *f);
 
@@ -84,6 +83,6 @@ public:
     void startDetCard();
     bool isHasCard() { return hasCard; }
     bool cardFree() { return !SDbusy; }
-    void loadBmp(string fileSrc, string fileName);
+    XinCorePicture::Bmp24Raw* loadBmp(string fileSrc, string fileName);
 };
 #endif

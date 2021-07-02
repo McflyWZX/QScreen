@@ -1,7 +1,7 @@
 /*
  * @Author: Mcfly
  * @Date: 2021-06-16 19:42:35
- * @LastEditTime: 2021-07-01 23:49:34
+ * @LastEditTime: 2021-07-03 00:32:47
  * @LastEditors: Mcfly
  * @Description: SD卡的板级支持及各种文件支持
  * @FilePath: \QScreen\components\sdCard\sdCard.cpp
@@ -17,10 +17,10 @@ void SdCardBsp::sdCardDet()
     esp_err_t ret = ESP_OK;
     while (1)
     {
-        do{
+        do
+        {
             vTaskDelay(400 / portTICK_PERIOD_MS);
-        }
-        while (SDbusy);
+        } while (SDbusy);
         SDbusy = 1; //SD卡检测需要占用SD卡资源，置高SDbusy
         ret = esp_vfs_fat_sdmmc_mount(mountPoint.c_str(), &sdHost, &slot_config, &mount_config, &card);
         if (ret != ESP_OK)
@@ -36,7 +36,9 @@ void SdCardBsp::sdCardDet()
             }
             hasCard = 0;
             gpio_set_level((gpio_num_t)17, 1);
-        } else {
+        }
+        else
+        {
             esp_vfs_fat_sdmmc_unmount();
             hasCard = 1;
             gpio_set_level((gpio_num_t)17, 0);
@@ -128,13 +130,13 @@ void SdCardBsp::closeFile(FILE *f)
  * @Author: Mcfly
  * @Date: 2021-07-01 23:03:26
  */
-void SdCardBsp::showBmpHead(BitmapFileHearder* pBmpHead)
+void SdCardBsp::showBmpHead(BitmapFileHearder *pBmpHead)
 {
     printf("位图文件头:\r\n");
-    printf("文件大小:%d\r\n",(*pBmpHead).bfSize);
-    printf("保留字:%d\r\n",(*pBmpHead).bfReserved1);
-    printf("保留字:%d\r\n",(*pBmpHead).bfReserved2);
-    printf("实际位图数据的偏移字节数:%d\r\n",(*pBmpHead).bfOffBits);    
+    printf("文件大小:%d\r\n", (*pBmpHead).bfSize);
+    printf("保留字:%d\r\n", (*pBmpHead).bfReserved1);
+    printf("保留字:%d\r\n", (*pBmpHead).bfReserved2);
+    printf("实际位图数据的偏移字节数:%d\r\n", (*pBmpHead).bfOffBits);
 }
 
 /**
@@ -144,20 +146,20 @@ void SdCardBsp::showBmpHead(BitmapFileHearder* pBmpHead)
  * @Author: Mcfly
  * @Date: 2021-07-01 23:02:13
  */
-void SdCardBsp::showBmpInforHead(BitmapInfoHearder* pBmpInforHead)
+void SdCardBsp::showBmpInforHead(BitmapInfoHearder *pBmpInforHead)
 {
     printf("位图信息头:\r\n");
-    printf("结构体的长度:%d\r\n",(*pBmpInforHead).biSize);
-    printf("位图宽:%d\r\n",(*pBmpInforHead).biWidth);
-    printf("位图高:%d\r\n",(*pBmpInforHead).biHeight);
-    printf("biPlanes平面数:%d\r\n",(*pBmpInforHead).biPlanes);
-    printf("biBitCount采用颜色位数:%d\r\n",(*pBmpInforHead).biBitCount);
-    printf("压缩方式:%d\r\n",(*pBmpInforHead).biCompression);
-    printf("biSizeImage实际位图数据占用的字节数:%d\r\n",(*pBmpInforHead).biSizeImage);
-    printf("X方向分辨率:%d\r\n",(*pBmpInforHead).biXPelsPerMeter);
-    printf("Y方向分辨率:%d\r\n",(*pBmpInforHead).biYPelsPerMeter);
-    printf("使用的颜色数:%d\r\n",(*pBmpInforHead).biClrUsed);
-    printf("重要颜色数:%d\r\n",(*pBmpInforHead).biClrImportant);
+    printf("结构体的长度:%d\r\n", (*pBmpInforHead).biSize);
+    printf("位图宽:%d\r\n", (*pBmpInforHead).biWidth);
+    printf("位图高:%d\r\n", (*pBmpInforHead).biHeight);
+    printf("biPlanes平面数:%d\r\n", (*pBmpInforHead).biPlanes);
+    printf("biBitCount采用颜色位数:%d\r\n", (*pBmpInforHead).biBitCount);
+    printf("压缩方式:%d\r\n", (*pBmpInforHead).biCompression);
+    printf("biSizeImage实际位图数据占用的字节数:%d\r\n", (*pBmpInforHead).biSizeImage);
+    printf("X方向分辨率:%d\r\n", (*pBmpInforHead).biXPelsPerMeter);
+    printf("Y方向分辨率:%d\r\n", (*pBmpInforHead).biYPelsPerMeter);
+    printf("使用的颜色数:%d\r\n", (*pBmpInforHead).biClrUsed);
+    printf("重要颜色数:%d\r\n", (*pBmpInforHead).biClrImportant);
 }
 
 /**
@@ -168,13 +170,12 @@ void SdCardBsp::showBmpInforHead(BitmapInfoHearder* pBmpInforHead)
   * @Author: Mcfly
   * @Date: 2021-06-19 17:46:52
   */
-void SdCardBsp::loadBmp(string fileSrc, string fileName)
+XinCorePicture::Bmp24Raw* SdCardBsp::loadBmp(string fileSrc, string fileName)
 {
     int i, j, k, mode;
     int width, height, l_width, l_height;
 
     unsigned char red, green, blue;
-    unsigned char pColorData[960];
     BitmapFileHearder bitHead;
     BitmapInfoHearder bitInfoHead;
     unsigned short fileType;
@@ -191,7 +192,7 @@ void SdCardBsp::loadBmp(string fileSrc, string fileName)
         if (fileType != 0x4d42)
         {
             printf("file is not .bmp file!\r\n");
-            return;
+            return NULL;//XinCorePicture::Bmp24Raw(0, 0, 0, NULL);
         }
         else
         {
@@ -211,81 +212,24 @@ void SdCardBsp::loadBmp(string fileSrc, string fileName)
     else
     {
         printf("file open fail!\r\n");
-        return;
+        return NULL;//XinCorePicture::Bmp24Raw(0, 0, 0, NULL);
     }
 
     width = bitInfoHead.biWidth;
     height = bitInfoHead.biHeight;
 
-    if (width > height)
-    {
-        l_width = widthColorBytes(width * bitInfoHead.biBitCount); //计算位图的实际宽度并确保它为32的倍数
-        l_height = height;
-        printf("%d\r\n", l_width);
-        printf("%d\r\n", l_height);
-        if (0)//l_width > 960 - 3 * y)
-        {
-            printf("\n宽度过大)\n");
-            return;
-        }
-        if (0)//l_height > 240 - 3 * x)
-        {
-            printf("\n高度过大\n");
-            return;
-        }
-        mode = 1;
-    }
-    else
-    {
-        l_width = widthColorBytes(width * bitInfoHead.biBitCount); //计算位图的实际宽度并确保它为32的倍数
-        l_height = height;
-        printf("%d\r\n", l_width);
-        printf("%d\r\n", l_height);
-        if (0)//l_width > 720 - 3 * x)
-        {
-            printf("\nSORRY, PIC IS TOO BIG (<=240)\n");
-            return;
-        }
-        if (0)//l_height > 320 - 3 * y)
-        {
-            printf("\nSORRY, PIC IS TOO BIG (<=320)\n");
-            return;
-        }
-        mode = 0;
-    }
+    l_width = widthColorBytes(width * bitInfoHead.biBitCount); //计算位图的实际宽度并确保它为32的倍数
+    l_height = height;
+    printf("%d\r\n", l_width);
+    printf("%d\r\n", l_height);
 
-    if (bitInfoHead.biBitCount >= 24)
-    {
+    unsigned char *bmp24Data = new unsigned char[l_width * l_height];
 
-        //for (i = y; i < height + 1; i++)
-        //{
-
-            for (j = 0; j < l_width; j++) //将一行数据全部读入
-            {
-                fread(pColorData + j, sizeof(unsigned char), 1, bmpFile);
-            }
-
-            /*for (j = x; j < width; j++) //一行有效信息
-            {
-                k = j * 3; //一行中第K个像素的起点（地址）
-                red = pColorData[k + 2];
-                green = pColorData[k + 1];
-                blue = pColorData[k];
-                if (mode == 1)
-                    MY_LCD_WR_Data(i, j, RGB24TORGB16(red, green, blue)); //写入LCD-GRAM	显示出来
-                else
-                    MY_LCD_WR_Data(j, i, RGB24TORGB16(red, green, blue)); //写入LCD-GRAM	显示出来
-            }*/
-        //}
-        //lcd扫描方向复原
-    }
-    else
-    {
-        printf("SORRY, THIS PIC IS NOT A 24BITS REAL COLOR");
-        return;
-    }
+    fread(bmp24Data, sizeof(unsigned char), l_width * l_height, bmpFile);
 
     closeFile(bmpFile);
+
+    return new XinCorePicture::Bmp24Raw(width, height, l_width, bmp24Data);
 }
 
 SdCardBsp::SdCardBsp()
