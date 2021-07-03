@@ -1,7 +1,7 @@
 /*
  * @Author: Mcfly
  * @Date: 2021-03-26 19:11:07
- * @LastEditTime: 2021-07-03 01:12:36
+ * @LastEditTime: 2021-07-04 00:17:56
  * @LastEditors: Mcfly
  * @Description: 
  * @FilePath: \QScreen\main\main.cpp
@@ -118,7 +118,8 @@ extern "C"
         if(testBmpRaw2 == NULL)printf("bmp2 Err\r\n");
         XinCorePicture::Bmp16* testBmp1 = XinCorePicture::bmp24Raw2Bmp16(*testBmpRaw1);
         XinCorePicture::Bmp16* testBmp2 = XinCorePicture::bmp24Raw2Bmp16(*testBmpRaw2);
-
+        testBmp1 = XinCorePicture::nearestNeighborZoom(*testBmp1, 64, 64);
+        testBmp2 = XinCorePicture::nearestNeighborZoom(*testBmp2, 64, 64);
         //gpio_pad_select_gpio((gpio_num_t)0);
         //gpio_set_direction((gpio_num_t)0, GPIO_MODE_INPUT);
         
