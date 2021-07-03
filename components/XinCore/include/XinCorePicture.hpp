@@ -1,7 +1,7 @@
 /*
  * @Author: Mcfly
  * @Date: 2021-07-02 22:30:21
- * @LastEditTime: 2021-07-03 00:56:08
+ * @LastEditTime: 2021-07-04 00:10:04
  * @LastEditors: Mcfly
  * @Description: 提供XinOS的图片处理内核
  * @FilePath: \QScreen\components\XinCore\include\XinCorePicture.hpp
@@ -15,6 +15,7 @@ class XinCorePicture
 {
 private:
     static unsigned short RGB24TORGB16(unsigned char R, unsigned char G, unsigned char B) { return (unsigned short)((((R) >> 3) << 11) | (((G) >> 2) << 5) | ((B) >> 3)); }
+
 public:
     struct Bmp24Raw
     {
@@ -31,10 +32,13 @@ public:
         int height;
         unsigned char *bmpData;
         Bmp16(int w, int h, unsigned char *data) : width(w), height(h), bmpData(data) {}
+        unsigned short getPixel(int x, int y) { return ((unsigned short *)bmpData)[x + y * width]; }
+        void setPixel(int x, int y, unsigned short color) { ((unsigned short *)bmpData)[x + y * width] = color; }
     };
 
     XinCorePicture();
-    static XinCorePicture::Bmp16* bmp24Raw2Bmp16(Bmp24Raw &bmpRaw);
+    static XinCorePicture::Bmp16 *bmp24Raw2Bmp16(Bmp24Raw &bmpRaw);
+    static XinCorePicture::Bmp16 *nearestNeighborZoom(Bmp16 &srcBmp, int desiredX, int desiredY);
 };
 
 #endif
