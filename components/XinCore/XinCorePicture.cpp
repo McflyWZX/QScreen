@@ -1,16 +1,8 @@
+
 /*
  * @Author: Mcfly
  * @Date: 2021-07-02 22:42:31
- * @LastEditTime: 2021-07-04 00:28:28
- * @LastEditors: Mcfly
- * @Description: 
- * @FilePath: \QScreen\components\XinCore\XinCorePicture.cpp
- * 本人github:https://github.com/McflyWZX
- */
-/*
- * @Author: Mcfly
- * @Date: 2021-07-02 22:42:31
- * @LastEditTime: 2021-07-02 22:42:41
+ * @LastEditTime: 2021-07-08 14:09:31
  * @LastEditors: Mcfly
  * @Description: 提供XinOS的图片处理内核
  * @FilePath: \QScreen\components\XinCore\XinCorePicture.cpp

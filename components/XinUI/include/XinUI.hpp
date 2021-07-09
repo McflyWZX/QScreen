@@ -1,3 +1,12 @@
+/*
+ * @Author: Mcfly
+ * @Date: 2021-06-18 21:14:10
+ * @LastEditTime: 2021-07-09 14:28:39
+ * @LastEditors: Mcfly
+ * @Description: 
+ * @FilePath: \QScreen\components\XinUI\include\XinUI.hpp
+ * 本人github:https://github.com/McflyWZX
+ */
 #ifndef __XIN_UI_H
 #define __XIN_UI_H 
 
