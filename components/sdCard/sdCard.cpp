@@ -1,7 +1,7 @@
 /*
  * @Author: Mcfly
  * @Date: 2021-06-16 19:42:35
- * @LastEditTime: 2021-07-03 00:32:47
+ * @LastEditTime: 2021-07-10 10:54:49
  * @LastEditors: Mcfly
  * @Description: SD卡的板级支持及各种文件支持
  * @FilePath: \QScreen\components\sdCard\sdCard.cpp
@@ -237,7 +237,7 @@ SdCardBsp::SdCardBsp()
     mount_config = {
         .format_if_mount_failed = false, //格式化内存卡如果文件系统挂载失败
         .max_files = 8,
-        .allocation_unit_size = 16 * 1024};
+        .allocation_unit_size = 12 * 1024};
 
     //ESP_LOGI("SD", "Initializing SD card");
 

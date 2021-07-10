@@ -1,7 +1,7 @@
 /*
  * @Author: Mcfly
  * @Date: 2021-03-26 19:11:07
- * @LastEditTime: 2021-07-04 00:17:56
+ * @LastEditTime: 2021-07-10 14:16:36
  * @LastEditors: Mcfly
  * @Description: 
  * @FilePath: \QScreen\main\main.cpp
@@ -111,7 +111,21 @@ extern "C"
         {
             vTaskDelay(pdMS_TO_TICKS(10));
         }
-
+        XinCorePicture::Bmp24Raw* testBmpRawFont = bspCard.loadBmp("/sdcard", "engFont.bmp");
+        printf("Free heap: %d\n", esp_get_free_heap_size());
+        XinCorePicture::Bmp2* bmpFont = XinCorePicture::bmp24Raw2Bmp2(*testBmpRawFont);
+        printf("Free heap: %d\n", esp_get_free_heap_size());
+        delete testBmpRawFont;
+        printf("Free heap: %d\n", esp_get_free_heap_size());
+        XinCorePicture::Bmp2** bmpFonts = XinCorePicture::splitBmp2(*bmpFont, 20, 7);
+        printf("Free heap: %d\n", esp_get_free_heap_size());
+        delete bmpFont;
+        printf("Free heap: %d\n", esp_get_free_heap_size());
+        
+        /*while((!bspCard.isHasCard()) || (!bspCard.cardFree()))
+        {
+            vTaskDelay(pdMS_TO_TICKS(10));
+        }
         XinCorePicture::Bmp24Raw* testBmpRaw1 = bspCard.loadBmp("/sdcard", "test.bmp");
         XinCorePicture::Bmp24Raw* testBmpRaw2 = bspCard.loadBmp("/sdcard", "testb.bmp");
         if(testBmpRaw1 == NULL)printf("bmp1 Err\r\n");
@@ -119,7 +133,8 @@ extern "C"
         XinCorePicture::Bmp16* testBmp1 = XinCorePicture::bmp24Raw2Bmp16(*testBmpRaw1);
         XinCorePicture::Bmp16* testBmp2 = XinCorePicture::bmp24Raw2Bmp16(*testBmpRaw2);
         testBmp1 = XinCorePicture::nearestNeighborZoom(*testBmp1, 64, 64);
-        testBmp2 = XinCorePicture::nearestNeighborZoom(*testBmp2, 64, 64);
+        testBmp2 = XinCorePicture::nearestNeighborZoom(*testBmp2, 64, 64);*/
+
         //gpio_pad_select_gpio((gpio_num_t)0);
         //gpio_set_direction((gpio_num_t)0, GPIO_MODE_INPUT);
         
@@ -144,12 +159,14 @@ extern "C"
             omega += 3.1415926535 / 48;
             spiScreen.fillBuf(0, 0, 127, 127, screenBuf);*/
             //vTaskDelay(pdMS_TO_TICKS(100));
-            if(gpio_get_level((gpio_num_t)0))
+            spiScreen.fillBuf2(0, 0, bmpFonts['#' - ' ']->width - 1, bmpFonts['#' - ' ']->height - 1, bmpFonts['#' - ' ']->bmpData);
+            /*if(gpio_get_level((gpio_num_t)0))
             {            
-                spiScreen.fillBuf(0, 0, testBmp1->width - 1, testBmp1->height - 1, testBmp1->bmpData);
+                
             } else {              
                 spiScreen.fillBuf(0, 0, testBmp2->width - 1, testBmp2->height - 1, testBmp2->bmpData);
-            }
+            }*/
+            vTaskDelay(pdMS_TO_TICKS(50));
         }
     }
 }

@@ -87,6 +87,7 @@ public:
     void showString(unsigned short x,unsigned short y,const char *p,unsigned short color);
     void showNum(unsigned short x,unsigned short y,float num,unsigned char len,unsigned short color);
     void fillBuf(unsigned short xsta, unsigned short ysta, unsigned short width, unsigned short height, unsigned char *buf);
+    void fillBuf2(unsigned short xsta, unsigned short ysta, unsigned short width, unsigned short height, unsigned char *buf2);
     void showPicture(unsigned short x1,unsigned short y1,unsigned short x2,unsigned short y2);
 
     //ÑÕÉ«

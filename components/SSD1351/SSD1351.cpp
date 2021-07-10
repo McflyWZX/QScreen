@@ -523,6 +523,28 @@ void SSD1351::fillBuf(unsigned short xsta, unsigned short ysta, unsigned short w
 }
 
 /******************************************************************************
+      函数说明：在指定区域填充缓冲区内容
+      入口数据：xsta,ysta   起始坐标
+                width,height   图像宽高
+      返回值：  无
+******************************************************************************/
+void SSD1351::fillBuf2(unsigned short xsta, unsigned short ysta, unsigned short width, unsigned short height, unsigned char *buf2)
+{
+	unsigned short x, y, i;
+	LCD_Address_Set(xsta, ysta, xsta + width, ysta + height); //设置光标位置
+	LCD_WR_REG(0x5c);
+	OLED_DC_Set();
+	for (y = ysta, i = 0; y <= ysta + height; y++)
+	{
+		for (x = xsta; x <= xsta + width; x++, i++)
+		{
+			if(buf2[i])LCD_WR_DATA16(WHITE);
+			else LCD_WR_DATA16(BLACK);
+		}
+	}
+}
+
+/******************************************************************************
       函数说明：显示40x40图片
       入口数据：x,y    起点坐标
       返回值：  无
