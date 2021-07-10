@@ -1,7 +1,7 @@
 /*
  * @Author: Mcfly
  * @Date: 2021-07-08 19:42:54
- * @LastEditTime: 2021-07-09 15:04:08
+ * @LastEditTime: 2021-07-11 00:47:28
  * @LastEditors: Mcfly
  * @Description: 提供单向布局的对象
  * @FilePath: \QScreen\components\XinUI\include\XinLayout.hpp
@@ -39,6 +39,10 @@ private:
 public:
     XinLayout(XinXY centerXY, XinXY sizeXY, LayoutMode layoutMode, AlignmentMode alignmentMode)
         : XinControl(centerXY, sizeXY), layoutMode(layoutMode), alignmentMode(alignmentMode) {}
+    XinLayout(LayoutMode layoutMode, AlignmentMode alignmentMode)
+        : XinControl(XinXY(0,0), XinXY(0,0)), layoutMode(layoutMode), alignmentMode(alignmentMode) {}
+    XinLayout()
+        : XinControl(XinXY(0,0), XinXY(0,0)), layoutMode(LayoutMode::Horizontal), alignmentMode(AlignmentMode::Center) {}
     /**
      * @description: 从布局中填加一个控件，同时更新布局中相应控件的连接
      * @param {XinControl} *ctrl
@@ -55,9 +59,9 @@ public:
      * @Date: 2021-07-09 10:13:52
      */
     void remove(XinControl *ctrl);
-    short getWidth();
-    short getHeight();
-    void draw();
+    int getWidth();
+    int getHeight();
+    void draw(unsigned char *vram, XinXY vramSize);
 };
 
 #endif

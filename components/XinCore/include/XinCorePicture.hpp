@@ -1,7 +1,7 @@
 /*
  * @Author: Mcfly
  * @Date: 2021-07-02 22:30:21
- * @LastEditTime: 2021-07-10 14:28:40
+ * @LastEditTime: 2021-07-10 20:09:05
  * @LastEditors: Mcfly
  * @Description: 提供XinOS的图片处理内核
  * @FilePath: \QScreen\components\XinCore\include\XinCorePicture.hpp
@@ -15,10 +15,8 @@
 
 class XinCorePicture
 {
-private:
-    static unsigned short RGB24TORGB16(unsigned char R, unsigned char G, unsigned char B) { return (unsigned short)((((R) >> 3) << 11) | (((G) >> 2) << 5) | ((B) >> 3)); }
-
 public:
+    static unsigned short RGB24TORGB16(unsigned char R, unsigned char G, unsigned char B) { return (unsigned short)((((R) >> 3) << 11) | (((G) >> 2) << 5) | ((B) >> 3)); }
     struct Bmp24Raw
     {
         int width;
@@ -26,7 +24,7 @@ public:
         int rowSize;
         unsigned char *bmpData;
         Bmp24Raw(int w, int h, int rSize, unsigned char *data) : width(w), height(h), rowSize(rSize), bmpData(data) {}
-        ~Bmp24Raw() {delete bmpData;}
+        ~Bmp24Raw() { delete bmpData; }
     };
 
     struct Bmp16
@@ -35,7 +33,7 @@ public:
         int height;
         unsigned char *bmpData;
         Bmp16(int w, int h, unsigned char *data) : width(w), height(h), bmpData(data) {}
-        ~Bmp16() {delete bmpData;}
+        ~Bmp16() { delete bmpData; }
         unsigned short getPixel(int x, int y) { return ((unsigned short *)bmpData)[x + y * width]; }
         void setPixel(int x, int y, unsigned short color) { ((unsigned short *)bmpData)[x + y * width] = color; }
     };
@@ -44,11 +42,14 @@ public:
     {
         int width;
         int height;
+        int trueWidth;
+        int st, ed;
         unsigned char *bmpData;
-        Bmp2(int w, int h, unsigned char *data) : width(w), height(h), bmpData(data) {}
-        ~Bmp2() {delete bmpData;}
-        unsigned short getPixel(int x, int y) { return ((unsigned short *)bmpData)[x + y * width]; }
-        void setPixel(int x, int y, unsigned short color) { ((unsigned short *)bmpData)[x + y * width] = color; }
+        Bmp2(int w, int h, unsigned char *data) : width(w), height(h), trueWidth(-1), st(-1), ed(-1), bmpData(data) {}
+        Bmp2(int w, int h, int trueW, int st, int ed, unsigned char *data) : width(w), height(h), trueWidth(trueW), st(st), ed(ed), bmpData(data) {}
+        ~Bmp2() { delete bmpData; }
+        unsigned char getPixel(int x, int y) { return bmpData[x + y * width]; }
+        void setPixel(int x, int y, unsigned char color) { bmpData[x + y * width] = color; }
     };
 
     XinCorePicture();

@@ -1,7 +1,7 @@
 /*
  * @Author: Mcfly
  * @Date: 2021-03-26 19:11:07
- * @LastEditTime: 2021-07-10 14:16:36
+ * @LastEditTime: 2021-07-11 00:40:45
  * @LastEditors: Mcfly
  * @Description: 
  * @FilePath: \QScreen\main\main.cpp
@@ -44,12 +44,17 @@
 #include "esp_err.h"
 #include "esp_log.h"
 #include "sdCard.hpp"
-#include "XinCorePicture.hpp"
 #include "BatSupport.hpp"
 #include <algorithm>
 #include <inttypes.h>
 #include <math.h>
 #include <memory.h>
+#include "XinWindow.hpp"
+#include "XinText.hpp"
+#include "XinPIC.hpp"
+#include "XinUIConstants.hpp"
+#include "XinCorePicture.hpp"
+#include "XinCoreGraphic.hpp"
 
 /* Can use project configuration menu (idf.py menuconfig) to choose the GPIO to blink,
    or you can edit the following line and set a number here.
@@ -58,6 +63,7 @@
 
 using std::string;
 using std::vector;
+using XinUIConstants::XinXY;
 
 char strBuf[100];
 
@@ -101,26 +107,21 @@ extern "C"
 
         SSD1351 spiScreen;
         spiScreen.clear(BLACK);
-        //spiScreen.showDemo();
 
-        /*while((!bspCard.isHasCard()) || (!bspCard.cardFree()));
-        XinCorePicture::Bmp24Raw testBmpRaw = bspCard.loadBmp("/sdcard", "test.bmp");
-        XinCorePicture::Bmp16 testBmp = XinCorePicture::bmp24Raw2Bmp16(testBmpRaw);
-        spiScreen.fillBuf(0, 0, testBmp.width - 1, testBmp.height - 1, testBmp.bmpData); */     
-        while((!bspCard.isHasCard()) || (!bspCard.cardFree()))
-        {
-            vTaskDelay(pdMS_TO_TICKS(10));
-        }
-        XinCorePicture::Bmp24Raw* testBmpRawFont = bspCard.loadBmp("/sdcard", "engFont.bmp");
-        printf("Free heap: %d\n", esp_get_free_heap_size());
-        XinCorePicture::Bmp2* bmpFont = XinCorePicture::bmp24Raw2Bmp2(*testBmpRawFont);
-        printf("Free heap: %d\n", esp_get_free_heap_size());
-        delete testBmpRawFont;
-        printf("Free heap: %d\n", esp_get_free_heap_size());
-        XinCorePicture::Bmp2** bmpFonts = XinCorePicture::splitBmp2(*bmpFont, 20, 7);
-        printf("Free heap: %d\n", esp_get_free_heap_size());
-        delete bmpFont;
-        printf("Free heap: %d\n", esp_get_free_heap_size());
+        XinCoreGraphic::initBmpFont(bspCard);
+        XinWindow win(XinXY(64, 64), XinXY(128, 128), 1);
+        win.setBackgroundColor(XinCorePicture::RGB24TORGB16(237, 157, 178));
+        XinText text(XinXY(0, 0), XinXY(90, 16), "Love @GH!666(XinXin)", WHITE);
+        XinText text2(XinXY(0, 0), XinXY(120, 16), "6:23:45", WHITE);
+        win.add(&text2);
+        win.add(&text);
+        //spiScreen.showDemo();
+        while((!bspCard.isHasCard()) || (!bspCard.cardFree()));
+        XinCorePicture::Bmp24Raw *testBmpRaw = bspCard.loadBmp("/sdcard", "test.bmp");
+        XinPIC testPIC(XinCorePicture::bmp24Raw2Bmp16(*testBmpRaw));     
+        delete testBmpRaw;
+        testPIC.setAlphaColor(WHITE);
+        win.add(&testPIC);
         
         /*while((!bspCard.isHasCard()) || (!bspCard.cardFree()))
         {
@@ -137,35 +138,11 @@ extern "C"
 
         //gpio_pad_select_gpio((gpio_num_t)0);
         //gpio_set_direction((gpio_num_t)0, GPIO_MODE_INPUT);
-        
+        unsigned char *vram1 = new unsigned char[128 * 128 * 2];
         while (1)
         {
-            //sprintf(strBuf, "%.3f %s", myBat.getBatVoltage() * 4 / 1000.0f, bspCard.isHasCard() ? "Carded" : "NoCard");
-            //spiScreen.showString(0, 0, strBuf, MAGENTA);
-           /* memset(screenBuf, 0x00, 128 * 128 * 2);
-            biasX = 64 + R * cosf(omega);
-            biasY = 64 + R * sinf(omega);
-            for(short j = biasY + r; j >= biasY - r; j--)
-            {
-                for(short i = biasX - r; i <= biasX + r; i++)
-                {
-                    if((j - biasY) * (j - biasY) + (i - biasX) * (i - biasX) > r * r)
-                        continue;
-                    else {
-                        *((unsigned short*)(screenBuf + j * 256 + i * 2)) = color;
-                    }
-                }
-            }
-            omega += 3.1415926535 / 48;
-            spiScreen.fillBuf(0, 0, 127, 127, screenBuf);*/
-            //vTaskDelay(pdMS_TO_TICKS(100));
-            spiScreen.fillBuf2(0, 0, bmpFonts['#' - ' ']->width - 1, bmpFonts['#' - ' ']->height - 1, bmpFonts['#' - ' ']->bmpData);
-            /*if(gpio_get_level((gpio_num_t)0))
-            {            
-                
-            } else {              
-                spiScreen.fillBuf(0, 0, testBmp2->width - 1, testBmp2->height - 1, testBmp2->bmpData);
-            }*/
+            win.draw(vram1, XinXY(128, 128));
+            spiScreen.fillBuf(0, 0, 127, 127, vram1);
             vTaskDelay(pdMS_TO_TICKS(50));
         }
     }

@@ -1,7 +1,7 @@
 /*
  * @Author: Mcfly
  * @Date: 2021-07-08 15:54:01
- * @LastEditTime: 2021-07-09 14:59:15
+ * @LastEditTime: 2021-07-10 19:43:59
  * @LastEditors: Mcfly
  * @Description: 
  * @FilePath: \QScreen\components\XinUI\include\XinControl.hpp
@@ -22,14 +22,20 @@ protected:
 
 public:
     XinControl *bottom = NULL, *top = NULL, *right = NULL, *left = NULL;
-    
-    virtual short getTopY() { return centerXY.y + sizeXY.y / 2; }
-    virtual short getBottomY() { return centerXY.y - sizeXY.y / 2; }
-    virtual short getRightX() { return centerXY.x + sizeXY.x / 2; }
-    virtual short getLeftX() { return centerXY.x - sizeXY.x / 2; }
-    virtual short getWidth() { return sizeXY.x; }
-    virtual short getHeight() { return sizeXY.y; }
-    virtual void draw() = 0;
+
+    virtual void setStartX(int startX) { centerXY.x = startX + 1 + sizeXY.x / 2;}
+    virtual void setStartY(int startY) { centerXY.y = startY + 1 + sizeXY.y / 2;}
+    virtual void setCenterX(int centerX) { centerXY.x = centerX;}
+    virtual void setCenterY(int centerY) { centerXY.y = centerY;}
+    virtual int getTopY() { return centerXY.y - sizeXY.y / 2; }
+    virtual int getBottomY() { return centerXY.y + sizeXY.y / 2; }
+    virtual int getRightX() { return centerXY.x + sizeXY.x / 2; }
+    virtual int getLeftX() { return centerXY.x - sizeXY.x / 2; }
+    virtual int getCenterX() { return centerXY.x; }
+    virtual int getCenterY() { return centerXY.y; }
+    virtual int getWidth() { return sizeXY.x; }
+    virtual int getHeight() { return sizeXY.y; }
+    virtual void draw(unsigned char *vram, XinXY vramSize) = 0;
 };
 
 #endif

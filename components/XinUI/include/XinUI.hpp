@@ -19,7 +19,6 @@ private:
     const unsigned char bytesPrePixel = 2;
     unsigned char *vram;
 
-    int coor2Index(unsigned int x, unsigned int y){return y * widthPixels * bytesPrePixel + x;}
 public:
     XinUI();
     int addPlane(); //返回图层id

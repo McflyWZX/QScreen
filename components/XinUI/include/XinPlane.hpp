@@ -1,7 +1,7 @@
 /*
  * @Author: Mcfly
  * @Date: 2021-07-08 14:18:08
- * @LastEditTime: 2021-07-09 14:35:07
+ * @LastEditTime: 2021-07-10 16:49:00
  * @LastEditors: Mcfly
  * @Description: 
  * @FilePath: \QScreen\components\XinUI\include\XinPlane.hpp
@@ -10,19 +10,27 @@
 #ifndef __XIN_PLANE_H
 #define __XIN_PLANE_H
 
-class XinPlane
+#include "XinUIConstants.hpp"
+#include "XinControl.hpp"
+
+class XinPlane : public XinControl
 {
 private:
-    short width;
-    short height;
+    using XinXY = XinUIConstants::XinXY;
+
     unsigned char bytesPrePixel;
     unsigned char *vram;
     unsigned char layer;
 
-    int coor2Index(unsigned int x, unsigned int y) { return y * width * bytesPrePixel + x; }
+    int coor2Index(XinXY coor) { return coor.y * sizeXY.x * bytesPrePixel + coor.x; }
 
 protected:
-    XinPlane(short w, short h, unsigned char bytesPrePixel) : width(w), height(h), bytesPrePixel(bytesPrePixel){};
+    XinPlane(XinXY centerXY, XinXY sizeXY, unsigned char bytesPrePixel) 
+    : XinControl(centerXY, sizeXY), bytesPrePixel(bytesPrePixel)
+    {};
+
+public:
+    virtual void draw(unsigned char *vram, XinXY vramSize) = 0;
 };
 
 #endif

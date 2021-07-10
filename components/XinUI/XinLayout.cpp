@@ -3,7 +3,7 @@
 /*
  * @Author: Mcfly
  * @Date: 2021-07-09 11:19:07
- * @LastEditTime: 2021-07-09 15:08:31
+ * @LastEditTime: 2021-07-11 00:46:31
  * @LastEditors: Mcfly
  * @Description: 
  * @FilePath: \QScreen\components\XinUI\XinLayout.cpp
@@ -16,14 +16,34 @@ void XinLayout::add(XinControl *ctrl)
         switch (layoutMode)
         {
         case LayoutMode::Vertical:
+            ctrl->setStartY(controls.back()->getBottomY());
+            ctrl->setCenterX(this->getCenterX());
+            ctrl->top = controls.back();
             controls.back()->bottom = ctrl;
             break;
         case LayoutMode::Horizontal:
+            ctrl->setCenterY(this->getCenterY());
+            ctrl->setStartX(controls.back()->getRightX());
+            ctrl->left = controls.back();
             controls.back()->right = ctrl;
+            break;
+        }
+    } else {
+        ctrl->right = NULL;
+        switch (layoutMode)
+        {
+        case LayoutMode::Vertical:
+            ctrl->setStartY(this->getTopY());
+            ctrl->setCenterX(this->getCenterX());
+            break;
+        case LayoutMode::Horizontal:
+            ctrl->setCenterY(this->getCenterY());
+            ctrl->setStartX(this->getLeftX());
             break;
         }
     }
     controls.push_back(ctrl);
+    sizeXY = XinXY(getWidth(), getHeight());
 }
 /**
      * @description: 从布局中移去一个控件，同时更新布局中相应控件的连接
@@ -58,9 +78,9 @@ void XinLayout::remove(XinControl *ctrl)
         }
     }
 }
-short XinLayout::getWidth()
+int XinLayout::getWidth()
 {
-    short res = 0;
+    int res = 0;
     switch (layoutMode)
     {
     //垂直布局的宽度应该等于所用控件的最大宽度
@@ -83,9 +103,9 @@ short XinLayout::getWidth()
     }
     return res;
 }
-short XinLayout::getHeight()
+int XinLayout::getHeight()
 {
-    short res = 0;
+    int res = 0;
     switch (layoutMode)
     {
     //垂直布局的高度应该等于所用控件的高度和
@@ -109,12 +129,12 @@ short XinLayout::getHeight()
     return res;
 }
 
-void XinLayout::draw()
+void XinLayout::draw(unsigned char *vram, XinXY vramSize)
 {
     if(!visible)
         return;
     for (ctrlVector::iterator it = controls.begin(); it != controls.end(); it++)
     {
-        (*it)->draw();
+        (*it)->draw(vram, vramSize);
     }
 }

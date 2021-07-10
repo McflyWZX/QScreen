@@ -2,7 +2,7 @@
 /*
  * @Author: Mcfly
  * @Date: 2021-07-02 22:42:31
- * @LastEditTime: 2021-07-10 11:52:39
+ * @LastEditTime: 2021-07-10 20:36:48
  * @LastEditors: Mcfly
  * @Description: 提供XinOS的图片处理内核
  * @FilePath: \QScreen\components\XinCore\XinCorePicture.cpp
@@ -144,14 +144,33 @@ XinCorePicture::Bmp2 **XinCorePicture::splitBmp2(Bmp2 &srcBmp, int numX, int num
         for (int i = 0; i < numX; i++)
         {
             unsigned char *splitedBmpData = new unsigned char[sizeX * sizeY];
+            int trueWidth = -1, st = sizeX, ed = 0;
             for (int y = 0; y < sizeY; y++)
             {
                 unsigned char *distData = splitedBmpData + y * sizeX;
                 unsigned char *srcData = srcBmp.bmpData + i * sizeX +
                                          (j * sizeY + y) * srcBmp.width;
                 memcpy(distData, srcData, sizeX);
+                for (unsigned char *p = distData, k = 0; k < sizeX; k++, p++)
+                {
+                    if (*p == 1)
+                    {
+                        if (k < st)
+                            st = k;
+                        if (k > ed)
+                            ed = k;
+                    }
+                }
             }
-            bmps[j * numX + i] = new Bmp2(sizeX, sizeY, splitedBmpData);
+            if (ed < sizeX - 1)
+                ed++;
+            if(st > ed)
+            {
+                st = 0;
+                ed = sizeX - 1;
+            }
+            trueWidth = ed - st + 1;
+            bmps[j * numX + i] = new Bmp2(sizeX, sizeY, trueWidth, st, ed, splitedBmpData);
         }
     }
     return bmps;
