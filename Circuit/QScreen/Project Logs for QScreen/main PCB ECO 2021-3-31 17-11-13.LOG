@@ -1,4 +1,0 @@
-Removed Pin From Net: NetName=VDDA Pin=U?-48
-Added Pin To Net: NetName=VDDA Pin=U?-1
-Added Member To Class: ClassName=main Member=Component U? TPS630242YFFR
-Added Member To Class: ClassName=main Member=Component U? ESP32-D0WDQ6
