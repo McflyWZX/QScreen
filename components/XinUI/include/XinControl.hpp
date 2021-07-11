@@ -1,7 +1,7 @@
 /*
  * @Author: Mcfly
  * @Date: 2021-07-08 15:54:01
- * @LastEditTime: 2021-07-10 19:43:59
+ * @LastEditTime: 2021-07-11 02:59:27
  * @LastEditors: Mcfly
  * @Description: 
  * @FilePath: \QScreen\components\XinUI\include\XinControl.hpp
@@ -11,6 +11,7 @@
 #define __XIN_CONTROL_H
 
 #include "XinUIConstants.hpp"
+#include <cstdio>
 class XinControl
 {
 protected:

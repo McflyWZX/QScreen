@@ -1,7 +1,7 @@
 /*
  * @Author: Mcfly
  * @Date: 2021-07-08 19:42:54
- * @LastEditTime: 2021-07-11 00:47:28
+ * @LastEditTime: 2021-07-11 03:17:36
  * @LastEditors: Mcfly
  * @Description: 提供单向布局的对象
  * @FilePath: \QScreen\components\XinUI\include\XinLayout.hpp
@@ -36,11 +36,15 @@ private:
     LayoutMode layoutMode;
     AlignmentMode alignmentMode;
     ctrlVector controls;
+
+    void updateCtrlPos();
 public:
     XinLayout(XinXY centerXY, XinXY sizeXY, LayoutMode layoutMode, AlignmentMode alignmentMode)
         : XinControl(centerXY, sizeXY), layoutMode(layoutMode), alignmentMode(alignmentMode) {}
     XinLayout(LayoutMode layoutMode, AlignmentMode alignmentMode)
         : XinControl(XinXY(0,0), XinXY(0,0)), layoutMode(layoutMode), alignmentMode(alignmentMode) {}
+    XinLayout(XinXY centerXY, XinXY sizeXY)
+        : XinControl(centerXY, sizeXY), layoutMode(LayoutMode::Horizontal), alignmentMode(AlignmentMode::Center) {}
     XinLayout()
         : XinControl(XinXY(0,0), XinXY(0,0)), layoutMode(LayoutMode::Horizontal), alignmentMode(AlignmentMode::Center) {}
     /**

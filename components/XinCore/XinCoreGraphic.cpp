@@ -1,7 +1,7 @@
 /*
  * @Author: Mcfly
  * @Date: 2021-07-09 22:02:03
- * @LastEditTime: 2021-07-11 00:31:14
+ * @LastEditTime: 2021-07-11 01:18:13
  * @LastEditors: Mcfly
  * @Description: 
  * @FilePath: \QScreen\components\XinCore\XinCoreGraphic.cpp
@@ -15,10 +15,6 @@ XinCoreGraphic::Bmp2** XinCoreGraphic::bmpFontEng = NULL;
 
 void XinCoreGraphic::initBmpFont(SdCardBsp &card)
 {
-    while((!card.isHasCard()) || (!card.cardFree()))
-    {
-        vTaskDelay(pdMS_TO_TICKS(10));
-    }
     Bmp24Raw* testBmpRawFont = card.loadBmp("/sdcard", "engFont.bmp");
     Bmp2* bmpFont = XinCorePicture::bmp24Raw2Bmp2(*testBmpRawFont);
     delete testBmpRawFont;

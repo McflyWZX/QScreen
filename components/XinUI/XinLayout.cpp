@@ -1,9 +1,44 @@
 #include "XinLayout.hpp"
 
+void XinLayout::updateCtrlPos()
+{
+    sizeXY = XinXY(getWidth(), getHeight());
+    if (controls.size())
+    {
+        ctrlVector::iterator it = controls.begin();
+        ctrlVector::iterator lit = controls.begin();
+        switch (layoutMode)
+        {
+        case LayoutMode::Vertical:
+            (*it)->setStartY(this->getTopY());
+            (*it)->setCenterX(this->getCenterX());
+            break;
+        case LayoutMode::Horizontal:
+            (*it)->setCenterY(this->getCenterY());
+            (*it)->setStartX(this->getLeftX());
+            break;
+        }
+        for (it++; it != controls.end(); it++)
+        {
+            switch (layoutMode)
+            {
+            case LayoutMode::Vertical:
+                (*it)->setStartY((*lit)->getBottomY());
+                (*it)->setCenterX(this->getCenterX());
+                break;
+            case LayoutMode::Horizontal:
+                (*it)->setCenterY(this->getCenterY());
+                (*it)->setStartX((*lit)->getRightX());
+                break;
+            }
+            lit++;
+        }
+    }
+}
 /*
  * @Author: Mcfly
  * @Date: 2021-07-09 11:19:07
- * @LastEditTime: 2021-07-11 00:46:31
+ * @LastEditTime: 2021-07-11 02:19:10
  * @LastEditors: Mcfly
  * @Description: 
  * @FilePath: \QScreen\components\XinUI\XinLayout.cpp
@@ -28,7 +63,9 @@ void XinLayout::add(XinControl *ctrl)
             controls.back()->right = ctrl;
             break;
         }
-    } else {
+    }
+    else
+    {
         ctrl->right = NULL;
         switch (layoutMode)
         {
@@ -131,10 +168,11 @@ int XinLayout::getHeight()
 
 void XinLayout::draw(unsigned char *vram, XinXY vramSize)
 {
-    if(!visible)
+    if (!visible)
         return;
     for (ctrlVector::iterator it = controls.begin(); it != controls.end(); it++)
     {
         (*it)->draw(vram, vramSize);
     }
+    //updateCtrlPos();
 }

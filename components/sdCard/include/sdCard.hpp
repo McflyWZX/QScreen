@@ -1,7 +1,7 @@
 /*
  * @Author: Mcfly
  * @Date: 2021-06-16 19:42:35
- * @LastEditTime: 2021-07-03 00:31:39
+ * @LastEditTime: 2021-07-11 01:56:09
  * @LastEditors: Mcfly
  * @Description: 
  * @FilePath: \QScreen\components\sdCard\include\sdCard.hpp
@@ -18,12 +18,16 @@
 #include "freertos/task.h"
 #include "string"
 #include "XinCorePicture.hpp"
+#include <iostream>
+#include <fstream>
 
 using std::string;
 
 class SdCardBsp
 {
 private:
+    using ifstream = std::ifstream;
+    using ofstream = std::ofstream;
     //位图文件头信息结构定义
     //其中不包含文件类型信息（由于结构体的内存结构决定，要是加了的话将不能正确读取文件信息）
     struct BitmapFileHearder
@@ -84,5 +88,9 @@ public:
     bool isHasCard() { return hasCard; }
     bool cardFree() { return !SDbusy; }
     XinCorePicture::Bmp24Raw* loadBmp(string fileSrc, string fileName);
+    ifstream *openFileIFstream(string fileSrc, string fileName, std::ios_base::openmode mode);
+    void closeFileIFstream(ifstream *ifS);
+    ofstream *openFileOFstream(string fileSrc, string fileName, std::ios_base::openmode mode);
+    void closeFileOFstream(ofstream *of);
 };
 #endif

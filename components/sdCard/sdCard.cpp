@@ -1,7 +1,7 @@
 /*
  * @Author: Mcfly
  * @Date: 2021-06-16 19:42:35
- * @LastEditTime: 2021-07-10 10:54:49
+ * @LastEditTime: 2021-07-11 01:54:49
  * @LastEditors: Mcfly
  * @Description: SD卡的板级支持及各种文件支持
  * @FilePath: \QScreen\components\sdCard\sdCard.cpp
@@ -97,6 +97,10 @@ void SdCardBsp::startDetCard()
 
 FILE *SdCardBsp::openFile(string fileSrc, string fileName, string opType)
 {
+    while((!isHasCard()) || (!cardFree()))
+    {
+        vTaskDelay(pdMS_TO_TICKS(10));
+    }
     if (SDbusy || !hasCard)
     {
         printf("Card busy or no card\r\n");
@@ -123,6 +127,69 @@ void SdCardBsp::closeFile(FILE *f)
     return;
 }
 
+std::ifstream *SdCardBsp::openFileIFstream(string fileSrc, string fileName, std::ios_base::openmode mode)
+{
+    while((!isHasCard()) || (!cardFree()))
+    {
+        vTaskDelay(pdMS_TO_TICKS(10));
+    }
+    if (SDbusy || !hasCard)
+    {
+        printf("Card busy or no card\r\n");
+        return NULL;
+    }
+    //尝试挂载文件系统
+    SDbusy = 1;
+    esp_err_t ret = esp_vfs_fat_sdmmc_mount(mountPoint.c_str(), &sdHost, &slot_config, &mount_config, &card);
+    if (ret != ESP_OK)
+    {
+        SDbusy = 0;
+        hasCard = 0;
+        printf("Mount failed\r\n");
+        return NULL;
+    }
+    return new ifstream((fileSrc + "/" + fileName).c_str(), mode);
+}
+
+void SdCardBsp::closeFileIFstream(ifstream *ifS)
+{
+    ifS->close();
+    esp_vfs_fat_sdmmc_unmount();
+    SDbusy = 0;
+    return;
+}
+
+std::ofstream *SdCardBsp::openFileOFstream(string fileSrc, string fileName, std::ios_base::openmode mode)
+{
+    while((!isHasCard()) || (!cardFree()))
+    {
+        vTaskDelay(pdMS_TO_TICKS(10));
+    }
+    if (SDbusy || !hasCard)
+    {
+        printf("Card busy or no card\r\n");
+        return NULL;
+    }
+    //尝试挂载文件系统
+    SDbusy = 1;
+    esp_err_t ret = esp_vfs_fat_sdmmc_mount(mountPoint.c_str(), &sdHost, &slot_config, &mount_config, &card);
+    if (ret != ESP_OK)
+    {
+        SDbusy = 0;
+        hasCard = 0;
+        printf("Mount failed\r\n");
+        return NULL;
+    }
+    return new ofstream((fileSrc + "/" + fileName).c_str(), mode);
+}
+
+void SdCardBsp::closeFileOFstream(ofstream *ofS)
+{
+    ofS->close();
+    esp_vfs_fat_sdmmc_unmount();
+    SDbusy = 0;
+    return;
+}
 /**
  * @description: 打印BMP文件的头信息，用于调试
  * @param {*}

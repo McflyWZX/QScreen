@@ -1,7 +1,7 @@
 /*
  * @Author: Mcfly
  * @Date: 2021-07-10 15:36:13
- * @LastEditTime: 2021-07-10 20:29:51
+ * @LastEditTime: 2021-07-11 03:02:30
  * @LastEditors: Mcfly
  * @Description: 
  * @FilePath: \QScreen\components\XinUI\XinText.cpp
@@ -40,6 +40,7 @@ void XinText::setTxt(string s)
 {
     txt = s;
     setHeight();
+    //printf("txt      W:%d;H:%d;x:%d;y:%d\r\n", sizeXY.x, sizeXY.y, centerXY.x, centerXY.y);
 }
 
 void XinText::draw(unsigned char *vram, XinXY vramSize)

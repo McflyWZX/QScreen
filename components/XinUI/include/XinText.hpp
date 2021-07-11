@@ -1,7 +1,7 @@
 /*
  * @Author: Mcfly
  * @Date: 2021-06-19 00:47:36
- * @LastEditTime: 2021-07-10 20:19:59
+ * @LastEditTime: 2021-07-11 10:00:49
  * @LastEditors: Mcfly
  * @Description: 
  * @FilePath: \QScreen\components\XinUI\include\XinText.hpp
@@ -32,7 +32,12 @@ public:
         : XinControl(centerXY, sizeXY), txt(s), txtLen(0), color(color) {
             setHeight();
         }
+    XinText(XinXY sizeXY, unsigned short color)
+        : XinControl(XinXY(0, 0), sizeXY), txt(""), txtLen(0), color(color) {
+            setHeight();
+        }
     void setTxt(string s);
+    void setColor(unsigned short color){this->color = color;}
     void draw(unsigned char *vram, XinXY vramSize);
 };
 
