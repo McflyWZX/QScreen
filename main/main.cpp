@@ -1,7 +1,7 @@
 /*
  * @Author: Mcfly
  * @Date: 2021-03-26 19:11:07
- * @LastEditTime: 2021-07-11 10:15:32
+ * @LastEditTime: 2021-07-12 11:47:13
  * @LastEditors: Mcfly
  * @Description: 
  * @FilePath: \QScreen\main\main.cpp
@@ -201,7 +201,7 @@ extern "C"
         win.add(&text);
 
         //xTaskCreatePinnedToCore( &timeUpdate, "ScreenUpdateTask", 90000, &winBar, 2, NULL , tskNO_AFFINITY);
-        //wifi_init_sta();
+        wifi_init_sta();
         /*while((!bspCard.isHasCard()) || (!bspCard.cardFree()))
         {
             vTaskDelay(pdMS_TO_TICKS(10));
